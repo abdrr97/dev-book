@@ -8,6 +8,7 @@ import { AuthProvider } from './context/authContext'
 import { Home, NotFound, Profile } from './pages'
 // auth pages
 import Login from './pages/auth/Login'
+import SignUp from './pages/auth/SignUp'
 import ForgotPassword from './pages/auth/ForgotPassword'
 // private route
 import PrivateRoute from './routes/PrivateRoute'
@@ -24,6 +25,7 @@ export const App = () => {
               {/* <PrivateRoute path='/profile' component={Profile} /> */}
 
               <Route path='/log-in' component={Login} />
+              <Route path='/sign-up' component={SignUp} />
               <Route path='/forgot-password' component={ForgotPassword} />
 
               <Route path='*' component={NotFound} />
