@@ -12,10 +12,16 @@ const Home = () => {
 
         <div className='row'>
           {users &&
-            users.map(({ username, bio }, idx) => {
+            users.map(({ username, bio, online }, idx) => {
               return (
                 <div key={idx} className='col-3 '>
                   <div className='card mb-5'>
+                    {online ? (
+                      <span className='badge bg-success'>o</span>
+                    ) : (
+                      <span className='badge bg-warning'>o</span>
+                    )}
+
                     <div className='card-header'>
                       <Link to={`/p/${username}`}>{username}</Link> - {idx}
                     </div>

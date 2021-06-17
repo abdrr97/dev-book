@@ -21,7 +21,14 @@ const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    return auth.signOut()
+    const docRef = db.collection('users').doc(currentUser.email)
+    return docRef
+      .update({
+        online: false,
+      })
+      .finally(() => {
+        return auth.signOut()
+      })
   }
 
   const resetPassword = (email) => {
@@ -34,6 +41,19 @@ const AuthProvider = ({ children }) => {
   const updatePassword = (password) => {
     return currentUser.updatePassword(password)
   }
+
+  useEffect(() => {
+    if (currentUser) {
+      const docRef = db.collection('users').doc(currentUser.email)
+      if (currentUser) {
+        docRef.update({
+          online: true,
+        })
+      }
+    }
+
+    return () => {}
+  }, [currentUser])
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
