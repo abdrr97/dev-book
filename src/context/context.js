@@ -13,21 +13,33 @@ const PortfolioProvider = ({ children }) => {
 
   const [userProfileInfo, setUserProfileInfo] = useState({})
 
-  useEffect(() => {
-    if (currentUser) {
-      const docRef = db.collection('users').doc(currentUser.email).get()
+  const [users, setUsers] = useState([])
 
-      docRef.then((_doc) => {
-        if (_doc.exists) {
-          setUserProfileInfo(_doc.data())
+  const isUserExists = (username) => {
+    let exists = false
+    return db.collection('users').where('username', '==', username).get()
+  }
+
+  const getUsersProfile = () => {
+    db.collection('users').onSnapshot((snapshot) => {
+      const _filteredUsers = snapshot.docs.filter((_doc) => {
+        return _doc.data().username !== '' ? true : false
+      })
+
+      const _users = _filteredUsers.map((_doc) => {
+        return {
+          docId: _doc.id,
+          ..._doc.data(),
         }
       })
-    }
-  }, [currentUser])
 
+      setUsers(_users)
+    })
+  }
   const userProfile = (info) => {
     if (!currentUser) return
     let exists = false
+    const _docRef = db.collection('users').doc(currentUser.email)
 
     db.collection('users')
       .where('username', '==', info.username)
@@ -41,12 +53,34 @@ const PortfolioProvider = ({ children }) => {
         })
         exists = data.length > 0 ? true : false
         if (!exists) {
-          db.collection('users').doc(currentUser.email).update(info)
+          _docRef.update({
+            username: info.username,
+          })
         }
       })
+
+    _docRef.update({
+      bio: info.bio,
+    })
   }
 
-  const values = { userProfile, userProfileInfo }
+  useEffect(() => {
+    getUsersProfile()
+  }, [])
+
+  useEffect(() => {
+    if (currentUser) {
+      const docRef = db.collection('users').doc(currentUser.email).get()
+
+      docRef.then((_doc) => {
+        if (_doc.exists) {
+          setUserProfileInfo(_doc.data())
+        }
+      })
+    }
+  }, [currentUser])
+
+  const values = { userProfile, userProfileInfo, users, isUserExists }
 
   return <PortfolioContext.Provider value={values} children={children} />
 }

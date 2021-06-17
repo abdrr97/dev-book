@@ -3,8 +3,8 @@ import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
 
 const Login = () => {
-  const [email, setEmail] = useState('abdrr97@gmail.com')
-  const [password, setPassword] = useState('password')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { login } = useContext(AuthContext)

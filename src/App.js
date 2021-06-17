@@ -10,6 +10,7 @@ import { Home, NotFound, Profile } from './pages'
 import Login from './pages/auth/Login'
 import SignUp from './pages/auth/SignUp'
 import ForgotPassword from './pages/auth/ForgotPassword'
+import Portfolio from './pages/Portfolio'
 // private route
 import PrivateRoute from './routes/PrivateRoute'
 import { PortfolioProvider } from './context/context'
@@ -28,6 +29,8 @@ export const App = () => {
               <Route path='/sign-up' component={SignUp} />
               <Route path='/forgot-password' component={ForgotPassword} />
               <PrivateRoute path='/profile' component={Profile} />
+              <Route path='/p/:username' component={Portfolio} />
+
               <Route path='*' component={NotFound} />
             </Switch>
           </Router>

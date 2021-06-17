@@ -23,7 +23,7 @@ const SignUp = () => {
       setIsLoading(true)
       signup(email, password)
         .then(() => {
-          history.push('/')
+          history.push('/profile')
         })
         .catch((err) => {
           setError(err.message)

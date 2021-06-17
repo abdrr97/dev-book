@@ -21,16 +21,11 @@ const Navbar = () => {
                 </Link>
               </li>
 
-              <li className='nav-item'>
-                <Link className='nav-link' to='/sign-up'>
-                  Create Your Portfolio
-                </Link>
-              </li>
               {currentUser ? (
                 <>
                   <li className='nav-item'>
                     <Link className='nav-link' to='/profile'>
-                      Profile
+                      Create Portfolio
                     </Link>
                   </li>
                   <li className='nav-item'>
@@ -40,11 +35,18 @@ const Navbar = () => {
                   </li>
                 </>
               ) : (
-                <li className='nav-item'>
-                  <Link className='nav-link' to='/log-in'>
-                    Login
-                  </Link>
-                </li>
+                <>
+                  <li className='nav-item'>
+                    <Link className='nav-link' to='/sign-up'>
+                      SignUp
+                    </Link>
+                  </li>
+                  <li className='nav-item'>
+                    <Link className='nav-link' to='/log-in'>
+                      Login
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </div>
