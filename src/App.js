@@ -23,16 +23,18 @@ export const App = () => {
         <PortfolioProvider>
           <Router>
             <Navbar />
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <Route path='/log-in' component={Login} />
-              <Route path='/sign-up' component={SignUp} />
-              <Route path='/forgot-password' component={ForgotPassword} />
-              <PrivateRoute path='/profile' component={Profile} />
-              <Route path='/p/:username' component={Portfolio} />
+            <main className='container'>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/log-in' component={Login} />
+                <Route path='/sign-up' component={SignUp} />
+                <Route path='/forgot-password' component={ForgotPassword} />
+                <PrivateRoute path='/profile' component={Profile} />
+                <Route path='/p/:username' component={Portfolio} />
 
-              <Route path='*' component={NotFound} />
-            </Switch>
+                <Route path='*' component={NotFound} />
+              </Switch>
+            </main>
           </Router>
         </PortfolioProvider>
       </AuthProvider>

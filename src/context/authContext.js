@@ -9,10 +9,6 @@ const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const signup = (email, password) => {
-    db.collection('users').doc(email).set({
-      username: '',
-      bio: '',
-    })
     return auth.createUserWithEmailAndPassword(email, password)
   }
 
@@ -73,7 +69,10 @@ const AuthProvider = ({ children }) => {
     updatePassword,
   }
   return (
-    <AuthContext.Provider value={values} children={!isLoading && children} />
+    <AuthContext.Provider
+      value={values}
+      children={!isLoading ? children : <h1>Loading ...</h1>}
+    />
   )
 }
 export { AuthContext, AuthProvider }

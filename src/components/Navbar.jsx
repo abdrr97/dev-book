@@ -13,12 +13,13 @@ const Navbar = () => {
             Dev Book
           </Link>
 
-          <div className='collapse navbar-collapse'>
+          <div className=' navbar-'>
             <ul className='navbar-nav'>
               <li className='nav-item'>
                 <Link className='nav-link active' to='/'>
                   Home
                 </Link>
+                <div className='w-full'></div>
               </li>
 
               {currentUser ? (

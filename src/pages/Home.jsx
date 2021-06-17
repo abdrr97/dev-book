@@ -7,31 +7,36 @@ const Home = () => {
 
   return (
     <>
-      <main className='container-fluid'>
-        <h1>Home</h1>
+      <section className='mt-5'>
+        <h3 className='display-3 mb-3'>Home</h3>
 
         <div className='row'>
           {users &&
             users.map(({ username, bio, online }, idx) => {
               return (
-                <div key={idx} className='col-3 '>
+                <div key={idx} className='col-3 col-md-4 col-sm-6 col-lg-3'>
                   <div className='card mb-5'>
-                    {online ? (
-                      <span className='badge bg-success'>o</span>
-                    ) : (
-                      <span className='badge bg-warning'>o</span>
-                    )}
-
-                    <div className='card-header'>
-                      <Link to={`/p/${username}`}>{username}</Link> - {idx}
+                    <div className='card-header d-flex justify-content-between align-items-center'>
+                      <Link to={`/p/${username}`}>{username}</Link>
+                      {online ? (
+                        <span className='badge bg-success'>o</span>
+                      ) : (
+                        <span className='badge bg-danger'>o</span>
+                      )}
                     </div>
-                    <div className='card-body'>{bio}</div>
+                    <div className='card-body'>
+                      {bio || (
+                        <small>
+                          <i>no bio for this user</i>
+                        </small>
+                      )}
+                    </div>
                   </div>
                 </div>
               )
             })}
         </div>
-      </main>
+      </section>
     </>
   )
 }

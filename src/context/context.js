@@ -2,21 +2,15 @@ import React, { useState, useEffect, createContext, useContext } from 'react'
 import { db, storage, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 
-// Context
-
-// const collections = {}
-
 const PortfolioContext = createContext()
 
 const PortfolioProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
 
-  const [userProfileInfo, setUserProfileInfo] = useState({})
-
+  const [userProfileInfo, setUserProfileInfo] = useState(null)
   const [users, setUsers] = useState([])
 
   const isUserExists = (username) => {
-    let exists = false
     return db.collection('users').where('username', '==', username).get()
   }
 
@@ -36,6 +30,7 @@ const PortfolioProvider = ({ children }) => {
       setUsers(_users)
     })
   }
+
   const userProfile = (info) => {
     if (!currentUser) return
     let exists = false
