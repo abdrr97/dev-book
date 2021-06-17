@@ -1,13 +1,20 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioContext } from '../context/context'
 import { AuthContext } from '../context/authContext'
 
 const Profile = () => {
   const { currentUser } = useContext(AuthContext)
-  const { userProfile } = useContext(PortfolioContext)
+  const { userProfile, userProfileInfo } = useContext(PortfolioContext)
 
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
+
+  useEffect(() => {
+    if (userProfileInfo) {
+      setUsername(userProfileInfo.username)
+      setBio(userProfileInfo.bio)
+    }
+  }, [userProfileInfo])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -31,8 +38,8 @@ const Profile = () => {
           onChange={({ target }) => setUsername(target.value)}
           value={username}
           placeholder='username'
-          type='text'
           className='form-control mb-3'
+          type='text'
         />
         <input
           onChange={({ target }) => setBio(target.value)}

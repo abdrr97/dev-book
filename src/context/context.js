@@ -11,9 +11,22 @@ const PortfolioContext = createContext()
 const PortfolioProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
 
+  const [userProfileInfo, setUserProfileInfo] = useState({})
+
+  useEffect(() => {
+    if (currentUser) {
+      const docRef = db.collection('users').doc(currentUser.email).get()
+
+      docRef.then((_doc) => {
+        if (_doc.exists) {
+          setUserProfileInfo(_doc.data())
+        }
+      })
+    }
+  }, [currentUser])
+
   const userProfile = (info) => {
     if (!currentUser) return
-
     let exists = false
 
     db.collection('users')
@@ -33,7 +46,7 @@ const PortfolioProvider = ({ children }) => {
       })
   }
 
-  const values = { userProfile }
+  const values = { userProfile, userProfileInfo }
 
   return <PortfolioContext.Provider value={values} children={children} />
 }
