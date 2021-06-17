@@ -12,7 +12,8 @@ import SignUp from './pages/auth/SignUp'
 import ForgotPassword from './pages/auth/ForgotPassword'
 // private route
 import PrivateRoute from './routes/PrivateRoute'
-import { PortfolioProvider } from './context'
+import { PortfolioProvider } from './context/context'
+import Navbar from './components/Navbar'
 
 export const App = () => {
   return (
@@ -20,14 +21,13 @@ export const App = () => {
       <AuthProvider>
         <PortfolioProvider>
           <Router>
+            <Navbar />
             <Switch>
               <Route exact path='/' component={Home} />
-              {/* <PrivateRoute path='/profile' component={Profile} /> */}
-
               <Route path='/log-in' component={Login} />
               <Route path='/sign-up' component={SignUp} />
               <Route path='/forgot-password' component={ForgotPassword} />
-
+              <PrivateRoute path='/profile' component={Profile} />
               <Route path='*' component={NotFound} />
             </Switch>
           </Router>

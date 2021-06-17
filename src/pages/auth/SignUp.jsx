@@ -4,9 +4,9 @@ import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
 
 const SignUp = () => {
-  const [email, setEmail] = useState('abdrr97@gmail.com')
-  const [password, setPassword] = useState('password')
-  const [confirmPassowrd, setConfirmPassowrd] = useState('password')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassowrd, setConfirmPassowrd] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { signup } = useContext(AuthContext)
@@ -21,9 +21,13 @@ const SignUp = () => {
     try {
       setError('')
       setIsLoading(true)
-      signup(email, password).then(() => {
-        history.push('/')
-      })
+      signup(email, password)
+        .then(() => {
+          history.push('/')
+        })
+        .catch((err) => {
+          setError(err.message)
+        })
     } catch (ex) {
       setError(`${ex.message} 😢😢`)
     }
@@ -36,7 +40,7 @@ const SignUp = () => {
           <div className='card-body'>
             <h2 className='text-center mb-4'>Sign Up</h2>
 
-            <form action='' onSubmit={handleSignUp}>
+            <form onSubmit={handleSignUp}>
               {error && <div className='alert alert-danger'>{error}</div>}
 
               <div className='form-group'>
@@ -66,7 +70,9 @@ const SignUp = () => {
                 />
               </div>
               <div className='form-group'>
-                <label htmlFor='password-confirmation'>Password Confirmation</label>
+                <label htmlFor='password-confirmation'>
+                  Password Confirmation
+                </label>
                 <input
                   value={confirmPassowrd}
                   onChange={(event) => setConfirmPassowrd(event.target.value)}
@@ -79,7 +85,11 @@ const SignUp = () => {
                 />
               </div>
 
-              <button disabled={isLoading} type='submit' className='w-100 btn btn-primary mt-5'>
+              <button
+                disabled={isLoading}
+                type='submit'
+                className='w-100 btn btn-primary mt-5'
+              >
                 {!isLoading && 'Sign Up'}
                 {isLoading && (
                   <div className='d-flex justify-content-center'>
@@ -95,6 +105,9 @@ const SignUp = () => {
         <div className='w-100 text-center mt-2'>
           Already Have an Account? <Link to='/log-in'>Log in</Link>
         </div>
+        <Link className='nav-link active' to='/'>
+          Home
+        </Link>
       </div>
     </>
   )
