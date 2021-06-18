@@ -4,14 +4,14 @@ import { AuthContext } from '../context/authContext'
 
 const Profile = () => {
   const { currentUser } = useContext(AuthContext)
-  const { setUserProfile, userProfileInfo, message } =
+  const { updateUserProfile, userProfileInfo, message } =
     useContext(PortfolioContext)
 
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
 
   useEffect(() => {
-    if (userProfileInfo) {
+    if (userProfileInfo.username) {
       setUsername(userProfileInfo.username)
       setBio(userProfileInfo.bio)
     }
@@ -24,7 +24,7 @@ const Profile = () => {
       username,
     }
     if (bio.trim() !== '' || username.trim() !== '') {
-      setUserProfile(userInfo)
+      updateUserProfile(userInfo)
     }
   }
 
@@ -33,7 +33,9 @@ const Profile = () => {
       <section className='mt-5'>
         <h3 className='display-3'>Profile</h3>
 
-        {message && <div className='alert alert-success'>{message}</div>}
+        {message && (
+          <div className='alert alert-success'>{message}</div>
+        )}
 
         <form onSubmit={(e) => submitHandler(e)}>
           <input

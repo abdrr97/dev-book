@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import { auth, db } from '../firebase'
 import PageLoading from '../components/PageLoading'
 
-const AuthContext = React.createContext()
+const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
@@ -41,11 +41,9 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (currentUser) {
       const docRef = db.collection('users').doc(currentUser.email)
-      if (currentUser) {
-        docRef.update({
-          online: true,
-        })
-      }
+      docRef.update({
+        online: true,
+      })
     }
   }, [currentUser])
 

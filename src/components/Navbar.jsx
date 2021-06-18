@@ -26,7 +26,10 @@ const Navbar = () => {
                 <>
                   <li className='nav-item'>
                     <Link className='nav-link' to='/profile'>
-                      Create Portfolio
+                      Create Portfolio <br />
+                      <small>
+                        {currentUser && currentUser.email}
+                      </small>
                     </Link>
                   </li>
                   <li className='nav-item'>

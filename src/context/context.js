@@ -1,4 +1,9 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+} from 'react'
 import { db, storage, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 
@@ -7,12 +12,15 @@ const PortfolioContext = createContext()
 const PortfolioProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
 
-  const [userProfileInfo, setUserProfileInfo] = useState(null)
+  const [userProfileInfo, setUserProfileInfo] = useState({})
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
 
   const isUserExists = (username) => {
-    return db.collection('users').where('username', '==', username).get()
+    return db
+      .collection('users')
+      .where('username', '==', username)
+      .get()
   }
 
   const getUsersProfile = () => {
@@ -32,7 +40,7 @@ const PortfolioProvider = ({ children }) => {
     })
   }
 
-  const setUserProfile = (info) => {
+  const updateUserProfile = (info) => {
     if (!currentUser) return
     let exists = false
     const _docRef = db.collection('users').doc(currentUser.email)
@@ -61,6 +69,11 @@ const PortfolioProvider = ({ children }) => {
     })
     setMessage('bio was updated successfully')
 
+    setUserProfileInfo({
+      username: info.username,
+      bio: info.bio,
+    })
+
     setTimeout(() => {
       setMessage(null)
     }, 2500)
@@ -72,7 +85,10 @@ const PortfolioProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentUser) {
-      const docRef = db.collection('users').doc(currentUser.email).get()
+      const docRef = db
+        .collection('users')
+        .doc(currentUser.email)
+        .get()
 
       docRef.then((_doc) => {
         if (_doc.exists) {
@@ -86,14 +102,16 @@ const PortfolioProvider = ({ children }) => {
   }, [currentUser])
 
   const values = {
-    setUserProfile,
+    updateUserProfile,
     userProfileInfo,
     users,
     isUserExists,
     message,
   }
 
-  return <PortfolioContext.Provider value={values} children={children} />
+  return (
+    <PortfolioContext.Provider value={values} children={children} />
+  )
 }
 
 export { PortfolioContext, PortfolioProvider }
