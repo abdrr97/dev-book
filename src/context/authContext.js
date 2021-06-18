@@ -50,7 +50,7 @@ const AuthProvider = ({ children }) => {
     const docRef = db.collection('users').doc(currentUser.email)
     docRef.update({
       online: true,
-      lastLoggedIn: timestamp(),
+      // lastLoggedIn: timestamp(),
     })
   }, [currentUser])
 

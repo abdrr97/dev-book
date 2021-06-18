@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PortfolioContext } from '../context/context'
+import moment from 'moment'
 
 const Portfolio = () => {
   const { username } = useParams()
@@ -79,8 +80,11 @@ const Portfolio = () => {
                   <b>Address:</b> {userInfo.address}
                 </li>
                 <li className='list-group-item'>
-                  <b>Last Logged In:</b>{' '}
-                  {new Date(userInfo?.lastLoggedIn?.toDate()).toDateString()}
+                  <b>Last Logged In:</b>
+                  {moment(
+                    userInfo?.lastLoggedIn?.toDate(),
+                    'MMDDYYYY'
+                  ).fromNow()}
                 </li>
               </ul>
             </div>

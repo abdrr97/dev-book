@@ -1,11 +1,13 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { db, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
+import { PortfolioContext } from './context'
 
 const ChatContext = createContext()
 
 const ChatProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
+  const { user } = useContext(PortfolioContext)
   const [messages, setMessages] = useState([])
   const [selectedUser, setSelectedUser] = useState({})
   // this is pretty complicated logic to make a comment on 🙄
@@ -34,6 +36,7 @@ const ChatProvider = ({ children }) => {
       email: currentUser.email,
       roomName: chatRoomName,
       message: message,
+      username: user.username,
       createdAt: timestamp(),
     })
   }

@@ -2,10 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ChatContext } from '../context/chatContext'
 import { PortfolioContext } from '../context/context'
 import { RiRadioButtonLine } from 'react-icons/ri'
+import { AuthContext } from '../context/authContext'
+import moment from 'moment'
 
 // as i sed in the chat context this bit difficult logic to comprehend
 
 const ChatRoom = () => {
+  const { currentUser } = useContext(AuthContext)
   const { users } = useContext(PortfolioContext)
   const { messages, startConversation, selectedUser, setSelectedUser } =
     useContext(ChatContext)
@@ -46,7 +49,7 @@ const ChatRoom = () => {
             {users &&
               users
                 // => this filter is if you want to message your self (if you are crazy enough)
-                // .filter((_user) => _user.docId !== currentUser.email)
+                .filter((_user) => _user.docId !== currentUser.email)
                 .map((_user, idx) => {
                   const { uid, username, docId, online } = _user
                   return (
@@ -87,14 +90,32 @@ const ChatRoom = () => {
             className='list-group mb-3'
             style={{ maxHeight: '300px', overflowY: 'scroll' }}
           >
-            {messages.map(({ email, message }, idx) => {
+            {messages.map(({ message, uid, email, createdAt }, idx) => {
               return (
-                <div key={idx} className='list-group-item'>
-                  <small className='badge bg-primary mx-3'>{email}</small>
-                  {message}
-                </div>
+                <section
+                  key={idx}
+                  className='list-group-item d-flex justify-content-between'
+                >
+                  <article>
+                    <small
+                      className={
+                        currentUser.uid === uid
+                          ? 'badge bg-primary mx-2'
+                          : 'badge bg-warning mx-2'
+                      }
+                    >
+                      {email}
+                    </small>
+                    {message}
+                  </article>
+                  <small>
+                    {moment(createdAt?.toDate(), 'MMDDYY').fromNow()}
+                  </small>
+                </section>
               )
             })}
+
+            {/* this is to auto scroll down */}
             <span ref={down}></span>
           </div>
 

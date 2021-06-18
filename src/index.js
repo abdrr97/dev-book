@@ -13,11 +13,11 @@ const root = document.getElementById('root')
 
 ReactDOM.render(
   <AuthProvider>
-    <ChatProvider>
-      <PortfolioProvider>
+    <PortfolioProvider>
+      <ChatProvider>
         <App />
-      </PortfolioProvider>
-    </ChatProvider>
+      </ChatProvider>
+    </PortfolioProvider>
   </AuthProvider>,
   root
 )
