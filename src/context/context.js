@@ -15,6 +15,7 @@ const PortfolioProvider = ({ children }) => {
   const [userProfileInfo, setUserProfileInfo] = useState({})
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
+  const [user, setUser] = useState(null)
 
   const isUserExists = (username) => {
     return db
@@ -42,9 +43,9 @@ const PortfolioProvider = ({ children }) => {
 
   const updateUserProfile = (info) => {
     if (!currentUser) return
+    // change username if not exists in users collection
     let exists = false
     const _docRef = db.collection('users').doc(currentUser.email)
-
     db.collection('users')
       .where('username', '==', info.username)
       .get()
@@ -63,15 +64,52 @@ const PortfolioProvider = ({ children }) => {
           setMessage('user was updated successfully')
         }
       })
+    //END: update username
 
-    _docRef.update({
-      bio: info.bio,
-    })
-    setMessage('bio was updated successfully')
+    // upload/update image url only
+    const { file } = info
+    const types = ['image/png', 'image/jpeg']
+
+    if (file && types.includes(file.type)) {
+      const stgRef = storage.ref(file.name)
+      stgRef.put(file).on(
+        'state_changed',
+        (snap) => {
+          // uploading
+          const percentage =
+            (snap.bytesTransferred / snap.totalBytes) * 100
+          // setProgress(percentage)
+        },
+        (err) => {
+          // on error
+          // setError(err)
+        },
+        () => {
+          // on finish upload
+          stgRef.getDownloadURL().then((url) => {
+            _docRef.update({
+              photoURL: url,
+            })
+          })
+        }
+      )
+    }
+
+    _docRef
+      .update({
+        bio: info.bio,
+        address: info.address,
+        birthDate: info.birthDate,
+      })
+      .then(() => {
+        setMessage('user profile info was updated successfully')
+      })
 
     setUserProfileInfo({
       username: info.username,
       bio: info.bio,
+      address: info.address,
+      birthDate: info.birthDate,
     })
 
     setTimeout(() => {
@@ -79,11 +117,29 @@ const PortfolioProvider = ({ children }) => {
     }, 2500)
   }
 
+  const getCurrentUser = () => {
+    if (!currentUser) return
+
+    const _docRef = db.collection('users').doc(currentUser.email)
+
+    _docRef.get().then((_doc) => {
+      if (_doc.exists) {
+        setUser({
+          docId: _doc.id,
+          ..._doc.data(),
+        })
+      }
+    })
+  }
+
   useEffect(() => {
     getUsersProfile()
   }, [])
 
   useEffect(() => {
+    getCurrentUser()
+
+    // TODO:
     if (currentUser) {
       const docRef = db
         .collection('users')
@@ -107,6 +163,7 @@ const PortfolioProvider = ({ children }) => {
     users,
     isUserExists,
     message,
+    user,
   }
 
   return (

@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
+import { PortfolioContext } from '../context/context'
+import { BsBellFill } from 'react-icons/bs'
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
-
+  const { user } = useContext(PortfolioContext)
   return (
     <>
       <nav className='navbar navbar-expand navbar-light bg-light'>
@@ -15,21 +17,24 @@ const Navbar = () => {
 
           <div className=' navbar-'>
             <ul className='navbar-nav'>
-              <li className='nav-item'>
-                <Link className='nav-link active' to='/'>
-                  Home
-                </Link>
-                <div className='w-full'></div>
-              </li>
-
               {currentUser ? (
                 <>
                   <li className='nav-item'>
-                    <Link className='nav-link' to='/profile'>
-                      Create Portfolio <br />
-                      <small>
-                        {currentUser && currentUser.email}
-                      </small>
+                    <button className='btn-notification mx-2 btn nav-link'>
+                      <BsBellFill />
+                      <span className='notification'></span>
+                    </button>
+                  </li>
+                  {user && (
+                    <li className='nav-item'>
+                      <Link className='nav-link' to={`/p/${user.username}`}>
+                        {user.username}
+                      </Link>
+                    </li>
+                  )}
+                  <li className='nav-item'>
+                    <Link className='active nav-link' to='/profile'>
+                      Settings
                     </Link>
                   </li>
                   <li className='nav-item'>

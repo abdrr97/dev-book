@@ -1,10 +1,15 @@
 import React, { useContext } from 'react'
 import { PortfolioContext } from '../context/context'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { RiRadioButtonLine } from 'react-icons/ri'
+import { ChatContext } from '../context/chatContext'
+import { AuthContext } from '../context/authContext'
 
 const Home = () => {
   const { users } = useContext(PortfolioContext)
+  const { currentUser } = useContext(AuthContext)
+  const { setSelectedUser } = useContext(ChatContext)
+  const history = useHistory()
 
   return (
     <>
@@ -20,21 +25,15 @@ const Home = () => {
         )}
 
         <div className='row'>
-          {users.map(({ username, bio, online }, idx) => {
+          {users.map((_user, idx) => {
+            const { bio, username, online } = _user
             return (
-              <div
-                key={idx}
-                className='col-3 col-md-4 col-sm-6 col-lg-3'
-              >
+              <div key={idx} className='col-3 col-md-4 col-sm-6 col-lg-3'>
                 <div className='card mb-5'>
                   <div className='card-header d-flex justify-content-between align-items-center'>
                     <Link to={`/p/${username}`}>{username}</Link>
                     {
-                      <span
-                        className={
-                          online ? 'text-success' : 'text-danger'
-                        }
-                      >
+                      <span className={online ? 'text-success' : 'text-danger'}>
                         <RiRadioButtonLine />
                       </span>
                     }
@@ -46,6 +45,22 @@ const Home = () => {
                       </small>
                     )}
                   </div>
+                  {currentUser && (
+                    <div className='card-footer'>
+                      <button
+                        className='btn btn-sm btn-primary'
+                        onClick={() => {
+                          setSelectedUser({
+                            ..._user,
+                            email: _user.docId,
+                          })
+                          history.push('/chat-room')
+                        }}
+                      >
+                        send message
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )

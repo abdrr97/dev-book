@@ -16,11 +16,24 @@ const ChatProvider = ({ children }) => {
 
   const startConversation = (message) => {
     if (!currentUser) return
+    if (!selectedUser) return
+
+    const usersColRef = db.collection('users')
+    const to = usersColRef.doc(selectedUser.email)
+    const from = usersColRef.doc(currentUser.email)
+    const chatRoomName = selectedUser.email + ' ' + currentUser.email
+
+    from.update({
+      room: chatRoomName,
+    })
+    to.update({
+      room: chatRoomName,
+    })
 
     db.collection('messages').add({
       uid: currentUser.uid,
       email: currentUser.email,
-      room: selectedUser,
+      roomName: chatRoomName,
       message: message,
       createdAt: timestamp(),
     })
@@ -28,17 +41,35 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (!currentUser) return
+    if (!selectedUser) return
+    const chatRoomName1 = selectedUser.email + ' ' + currentUser.email
+    const chatRoomName2 = currentUser.email + ' ' + selectedUser.email
 
     const unsubscribe = db
       .collection('messages')
       .orderBy('createdAt')
       .onSnapshot((snapshot) => {
-        const _messages = snapshot.docs.map((_doc) => {
-          return {
-            docId: _doc.id,
-            ..._doc.data(),
-          }
-        })
+        const _messages = snapshot.docs
+          .filter((_doc) => {
+            const _message = {
+              docId: _doc.id,
+              ..._doc.data(),
+            }
+
+            if (
+              _message.roomName === chatRoomName1 ||
+              _message.roomName === chatRoomName2
+            ) {
+              return true
+            }
+            return false
+          })
+          .map((_doc) => {
+            return {
+              docId: _doc.id,
+              ..._doc.data(),
+            }
+          })
 
         setMessages(_messages)
       })

@@ -47,16 +47,38 @@ const Portfolio = () => {
   if (exists) {
     return (
       <>
-        <h1>Portfolio</h1>
-        <div className='card'>
-          <div className='card-body'>
-            {userInfo.docId}
-            <br />
-            {userInfo.username}
-            <br />
-            {userInfo.bio}
+        <section className='mt-5'>
+          <h1 className='display-3'>Portfolio</h1>
+          <div className='card'>
+            <div className='card-body'>
+              <img
+                width='100'
+                className='img-thumbnail mb-3'
+                src={userInfo.photoURL}
+                alt={userInfo.username}
+              />
+
+              <ul className='list-group '>
+                <li className='list-group-item'>
+                  <b>email:</b> {userInfo.docId}
+                </li>
+                <li className='list-group-item'>
+                  <b>username:</b> {userInfo.username}
+                </li>
+                <li className='list-group-item'>
+                  <b>bio:</b> {userInfo.bio}
+                </li>
+                <li className='list-group-item'>
+                  <b>Birth </b>Date:
+                  {userInfo.birthDate}
+                </li>
+                <li className='list-group-item'>
+                  <b>Address:</b> {userInfo.address}
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
+        </section>
       </>
     )
   }
