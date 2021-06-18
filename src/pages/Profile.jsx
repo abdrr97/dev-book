@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioContext } from '../context/context'
 import { AuthContext } from '../context/authContext'
 
+// i refactored this to be much cleaner and more understandable
 const Profile = () => {
   const { currentUser } = useContext(AuthContext)
-  const { progress, updateUserProfile, message, user } = useContext(PortfolioContext)
+  const { progress, updateUserProfile, message, user } =
+    useContext(PortfolioContext)
 
   const [userInfo, setUserInfo] = useState({
     username: '',
@@ -25,13 +27,14 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    if (!user) return
-    setUserInfo({
-      username: user.username,
-      bio: user.bio,
-      address: user.address,
-      birthDate: user.birthDate,
-    })
+    if (user) {
+      setUserInfo({
+        username: user.username,
+        bio: user.bio,
+        address: user.address,
+        birthDate: user.birthDate,
+      })
+    }
   }, [user])
 
   return (
@@ -41,7 +44,12 @@ const Profile = () => {
         {message && <div className='alert alert-success'>{message}</div>}
 
         {user && (
-          <img width='100' className='mb-3 img-thumbnail' src={user.photoURL} alt={user.username} />
+          <img
+            width='100'
+            className='mb-3 img-thumbnail'
+            src={user.photoURL}
+            alt={user.username}
+          />
         )}
 
         {progress > 0 && (
@@ -61,16 +69,25 @@ const Profile = () => {
         )}
 
         <form onSubmit={(e) => submitHandler(e)}>
-          <input disabled value={currentUser.email} type='email' className='form-control mb-3' />
           <input
-            onChange={({ target }) => setUserInfo({ ...userInfo, username: target.value })}
+            disabled
+            value={currentUser.email}
+            type='email'
+            className='form-control mb-3'
+          />
+          <input
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, username: target.value })
+            }
             value={username}
             placeholder='username'
             className='form-control mb-3'
             type='text'
           />
           <input
-            onChange={({ target }) => setUserInfo({ ...userInfo, bio: target.value })}
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, bio: target.value })
+            }
             value={bio}
             placeholder='bio'
             type='text'
@@ -78,18 +95,24 @@ const Profile = () => {
           />
 
           <textarea
-            onChange={({ target }) => setUserInfo({ ...userInfo, address: target.value })}
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, address: target.value })
+            }
             value={address}
             placeholder='Address'
             className='form-control mb-3'
           />
           <input
-            onChange={({ target }) => setUserInfo({ ...userInfo, file: target.files[0] })}
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, file: target.files[0] })
+            }
             type='file'
             className='form-control mb-3'
           />
           <input
-            onChange={({ target }) => setUserInfo({ ...userInfo, birthDate: target.value })}
+            onChange={({ target }) =>
+              setUserInfo({ ...userInfo, birthDate: target.value })
+            }
             value={birthDate}
             type='date'
             className='form-control mb-3'

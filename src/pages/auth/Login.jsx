@@ -30,7 +30,10 @@ const Login = () => {
 
   return (
     <>
-      <div style={{ height: '100vh' }} className='d-flex justify-content-center align-items-center'>
+      <div
+        style={{ height: '100vh' }}
+        className='d-flex justify-content-center align-items-center'
+      >
         <div className='w-100' style={{ maxWidth: '400px' }}>
           <div className='card'>
             <div className='card-body'>
@@ -65,7 +68,11 @@ const Login = () => {
                 </div>
 
                 <div className='btn-group'>
-                  <button disabled={isLoading} type='submit' className='w-100 btn btn-primary mt-3'>
+                  <button
+                    disabled={isLoading}
+                    type='submit'
+                    className='w-100 btn btn-primary mt-3'
+                  >
                     {!isLoading && 'Login'}
                     {isLoading && (
                       <div className='d-flex justify-content-center'>

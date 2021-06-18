@@ -1,6 +1,7 @@
 import firebase from 'firebase'
 import 'firebase/auth'
 
+// firebase config , (credentials in .env.local to protect your database)
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -15,7 +16,7 @@ const db = firebaseConfig.firestore()
 const storage = firebase.storage()
 const timestamp = firebase.firestore.FieldValue.serverTimestamp
 
-// initialise auth
+// initialize auth
 const auth = firebaseConfig.auth()
 
 export { db, storage, timestamp, auth }

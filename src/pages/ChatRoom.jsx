@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ChatContext } from '../context/chatContext'
 import { PortfolioContext } from '../context/context'
 import { RiRadioButtonLine } from 'react-icons/ri'
-import { AuthContext } from '../context/authContext'
+
+// as i sed in the chat context this bit difficult logic to comprehend
 
 const ChatRoom = () => {
-  const { currentUser } = useContext(AuthContext)
   const { users } = useContext(PortfolioContext)
-  const { messages, startConversation, selectedUser, setSelectedUser } = useContext(ChatContext)
-
+  const { messages, startConversation, selectedUser, setSelectedUser } =
+    useContext(ChatContext)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -36,7 +36,6 @@ const ChatRoom = () => {
     down.current.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  // set first user as a selected user in the chat room
   return (
     <>
       <h5 className='display-4'>Chat Room</h5>
@@ -46,11 +45,15 @@ const ChatRoom = () => {
           <ul className='list-group'>
             {users &&
               users
+                // => this filter is if you want to message your self (if you are crazy enough)
                 // .filter((_user) => _user.docId !== currentUser.email)
                 .map((_user, idx) => {
                   const { uid, username, docId, online } = _user
                   return (
-                    <li key={uid} className='list-group-item d-flex justify-content-between'>
+                    <li
+                      key={uid}
+                      className='list-group-item d-flex justify-content-between'
+                    >
                       <button
                         className={
                           selectedUser?.uid === uid
@@ -80,13 +83,15 @@ const ChatRoom = () => {
         <article className='col-7'>
           <h5 className='display-5'>Chat</h5>
           {error && <div className='alert alert-warning'>{error}</div>}
-          <div className='list-group mb-3' style={{ maxHeight: '300px', overflowY: 'scroll' }}>
-            {messages.map(({ email, message, userx }, idx) => {
+          <div
+            className='list-group mb-3'
+            style={{ maxHeight: '300px', overflowY: 'scroll' }}
+          >
+            {messages.map(({ email, message }, idx) => {
               return (
                 <div key={idx} className='list-group-item'>
                   <small className='badge bg-primary mx-3'>{email}</small>
                   {message}
-                  <small>{userx}</small>
                 </div>
               )
             })}

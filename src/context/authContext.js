@@ -1,10 +1,14 @@
 import React, { useState, useEffect, createContext } from 'react'
-import { auth, db } from '../firebase'
+import { auth, db, timestamp } from '../firebase'
 import PageLoading from '../components/PageLoading'
 
 const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
+  // this is the auth scaffolding check
+  // discord to find the youtube video
+  // that explain this part step by step (good luck 😊)
+
   const [currentUser, setCurrentUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -21,6 +25,7 @@ const AuthProvider = ({ children }) => {
     return docRef
       .update({
         online: false,
+        lastLoggedIn: timestamp(),
       })
       .finally(() => {
         return auth.signOut()
@@ -39,12 +44,14 @@ const AuthProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    if (currentUser) {
-      const docRef = db.collection('users').doc(currentUser.email)
-      docRef.update({
-        online: true,
-      })
-    }
+    if (!currentUser) return
+
+    // change user's status to online when he log-in
+    const docRef = db.collection('users').doc(currentUser.email)
+    docRef.update({
+      online: true,
+      lastLoggedIn: timestamp(),
+    })
   }, [currentUser])
 
   useEffect(() => {

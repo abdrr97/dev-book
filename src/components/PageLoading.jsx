@@ -1,5 +1,6 @@
 import React from 'react'
 
+// loading components
 const PageLoading = () => {
   return (
     <main

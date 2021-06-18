@@ -47,6 +47,7 @@ const Home = () => {
                   </div>
                   {currentUser && (
                     <div className='card-footer'>
+                      {/* setting up the selected user for you to chat with  */}
                       <button
                         className='btn btn-sm btn-primary'
                         onClick={() => {

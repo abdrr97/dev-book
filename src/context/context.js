@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
-import { db, storage, timestamp } from '../firebase'
+import { db, storage } from '../firebase'
 import { AuthContext } from './authContext'
 
 const PortfolioContext = createContext()
@@ -12,12 +12,18 @@ const PortfolioProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [progress, setProgress] = useState(0)
 
+  // this method is looking for a users by its username
+  // and returns his doc when its found
   const isUserExists = (username) => {
     return db.collection('users').where('username', '==', username).get()
   }
 
+  // this is the main function for updating user profile
   const updateUserProfile = (info) => {
+    // if no user is logged in return
+    // (don't execute the other code)
     if (!currentUser) return
+
     // change username if not exists in users collection
     let exists = false
     const _docRef = db.collection('users').doc(currentUser.email)
@@ -87,17 +93,18 @@ const PortfolioProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    // getting users only if they have a username
     db.collection('users').onSnapshot((snapshot) => {
-      const _filteredUsers = snapshot.docs.filter((_doc) => {
-        return _doc.data().username !== '' ? true : false
-      })
-
-      const _users = _filteredUsers.map((_doc) => {
-        return {
-          docId: _doc.id,
-          ..._doc.data(),
-        }
-      })
+      const _users = snapshot.docs
+        .filter((_doc) => {
+          return _doc.data().username !== '' ? true : false
+        })
+        .map((_doc) => {
+          return {
+            docId: _doc.id,
+            ..._doc.data(),
+          }
+        })
 
       setUsers(_users)
     })
@@ -106,6 +113,7 @@ const PortfolioProvider = ({ children }) => {
   useEffect(() => {
     if (!currentUser) return
 
+    // getting the current logged-in user his info (username, bio, age, ...)
     const _docRef = db.collection('users').doc(currentUser.email)
 
     _docRef.onSnapshot((_doc) => {

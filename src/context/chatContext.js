@@ -1,10 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-} from 'react'
-import { db, storage, timestamp } from '../firebase'
+import React, { useState, useEffect, createContext, useContext } from 'react'
+import { db, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 
 const ChatContext = createContext()
@@ -13,11 +8,15 @@ const ChatProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
   const [messages, setMessages] = useState([])
   const [selectedUser, setSelectedUser] = useState({})
+  // this is pretty complicated logic to make a comment on 🙄
 
+  // function that starts a conversation with another user
   const startConversation = (message) => {
     if (!currentUser) return
     if (!selectedUser) return
 
+    // here i basicity make a link between the sender and receiver of the message
+    // by creating a room
     const usersColRef = db.collection('users')
     const to = usersColRef.doc(selectedUser.email)
     const from = usersColRef.doc(currentUser.email)
@@ -56,13 +55,10 @@ const ChatProvider = ({ children }) => {
               ..._doc.data(),
             }
 
-            if (
-              _message.roomName === chatRoomName1 ||
+            return _message.roomName === chatRoomName1 ||
               _message.roomName === chatRoomName2
-            ) {
-              return true
-            }
-            return false
+              ? true
+              : false
           })
           .map((_doc) => {
             return {

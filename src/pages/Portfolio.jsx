@@ -26,8 +26,9 @@ const Portfolio = () => {
         setLoading(false)
         setExists(_exists)
       })
-  }, [username])
+  }, [isUserExists, username])
 
+  // show this if loading is finished and he doesn't exist
   if (!loading && !exists) {
     return (
       <div className='text-center'>
@@ -36,6 +37,7 @@ const Portfolio = () => {
     )
   }
 
+  // show this if still loading
   if (loading) {
     return (
       <div className='text-center'>
@@ -44,6 +46,7 @@ const Portfolio = () => {
     )
   }
 
+  // show this if user was found
   if (exists) {
     return (
       <>

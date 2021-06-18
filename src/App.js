@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 // components
@@ -16,13 +16,20 @@ import Portfolio from './pages/Portfolio'
 import PrivateRoute from './routes/PrivateRoute'
 import Navbar from './components/Navbar'
 import ChatRoom from './pages/ChatRoom'
+import { db } from './firebase'
+import { AuthContext } from './context/authContext'
 
 export const App = () => {
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', (ev) => {
-  //     alert('HELLo')
-  //   })
-  // }, [])
+  const { currentUser } = useContext(AuthContext)
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', (ev) => {
+      const docRef = db.collection('users').doc(currentUser.email)
+      return docRef.update({
+        online: false,
+      })
+    })
+  }, [currentUser])
 
   return (
     <>

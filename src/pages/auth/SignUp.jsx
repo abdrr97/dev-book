@@ -2,19 +2,19 @@ import React, { useState } from 'react'
 import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
-import { db } from '../../firebase'
+import { db, timestamp } from '../../firebase'
 
 const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassowrd, setConfirmPassowrd] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const { signup } = useContext(AuthContext)
 
   const handleSignUp = (e) => {
     e.preventDefault()
-    if (password.trim() !== confirmPassowrd.trim()) {
+    if (password.trim() !== confirmPassword.trim()) {
       return setError('Passwords do not match 😭😭')
     }
     setIsLoading(true)
@@ -23,15 +23,21 @@ const SignUp = () => {
     try {
       signup(email, password)
         .then(({ user }) => {
-          db.collection('users').doc(email).set({
-            uid: user.uid,
-          })
+          db.collection('users')
+            .doc(email)
+            .set({
+              uid: user.uid,
+              lastLoggedIn: timestamp(),
+            })
+            .then(() => {
+              // after the sign up user will be directed to his profile
+              window.location = '/profile'
+            })
         })
         .catch((err) => {
           setError(err.message)
         })
         .finally(() => {
-          window.location = '/profile'
           setIsLoading(false)
         })
     } catch (ex) {
@@ -40,7 +46,10 @@ const SignUp = () => {
   }
   return (
     <>
-      <div style={{ height: '100vh' }} className='d-flex justify-content-center align-items-center'>
+      <div
+        style={{ height: '100vh' }}
+        className='d-flex justify-content-center align-items-center'
+      >
         <div className='w-100' style={{ maxWidth: '400px' }}>
           <div className='card'>
             <div className='card-body'>
@@ -76,10 +85,12 @@ const SignUp = () => {
                   />
                 </div>
                 <div className='mb-3'>
-                  <label htmlFor='password-confirmation'>Password Confirmation</label>
+                  <label htmlFor='password-confirmation'>
+                    Password Confirmation
+                  </label>
                   <input
-                    value={confirmPassowrd}
-                    onChange={(event) => setConfirmPassowrd(event.target.value)}
+                    value={confirmPassword}
+                    onChange={(event) => setConfirmPassword(event.target.value)}
                     required
                     id='password-confirmation'
                     name='password-confirmation'
@@ -89,7 +100,11 @@ const SignUp = () => {
                   />
                 </div>
 
-                <button disabled={isLoading} type='submit' className='w-100 btn btn-primary mt-5'>
+                <button
+                  disabled={isLoading}
+                  type='submit'
+                  className='w-100 btn btn-primary mt-5'
+                >
                   {!isLoading && 'Sign Up'}
                   {isLoading && (
                     <div className='d-flex justify-content-center'>

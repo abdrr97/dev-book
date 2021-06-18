@@ -27,7 +27,7 @@ const ForgotPassword = () => {
           setIsLoading(false)
         })
     } catch (ex) {
-      setError(`${ex.message} 😢😢`)
+      setError(ex.message)
     }
   }
 
@@ -41,8 +41,10 @@ const ForgotPassword = () => {
           <div className='card'>
             <div className='card-body'>
               <h2 className='text-center mb-4'>Forgot Password</h2>
-
               <form action='' onSubmit={handleForgotPassword}>
+                {message && (
+                  <div className='alert alert-success'>{message}</div>
+                )}
                 {error && <div className='alert alert-danger'>{error}</div>}
                 <div className='form-group'>
                   <label htmlFor='email'>Email</label>

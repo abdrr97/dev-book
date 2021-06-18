@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { PortfolioContext } from '../context/context'
 import { BsBellFill } from 'react-icons/bs'
+// this is a very basic component
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
