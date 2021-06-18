@@ -4,25 +4,20 @@ import { AuthContext } from '../context/authContext'
 
 const Profile = () => {
   const { currentUser } = useContext(AuthContext)
-  const { progress, updateUserProfile, userProfileInfo, message, user } =
-    useContext(PortfolioContext)
+  const { progress, updateUserProfile, message, user } = useContext(PortfolioContext)
 
-  const [username, setUsername] = useState('')
-  const [bio, setBio] = useState('')
-  // added
-  const [address, setAddress] = useState('')
-  const [file, setFile] = useState(null)
-  const [birthDate, setBirthDate] = useState('')
+  const [userInfo, setUserInfo] = useState({
+    username: '',
+    bio: '',
+    address: '',
+    file: null,
+    birthDate: '',
+  })
+
+  const { username, bio, address, birthDate } = userInfo
 
   const submitHandler = (e) => {
     e.preventDefault()
-    const userInfo = {
-      bio,
-      username,
-      address,
-      file,
-      birthDate,
-    }
 
     if (username.trim() !== '') {
       updateUserProfile(userInfo)
@@ -30,15 +25,15 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    if (userProfileInfo.username) {
-      setUsername(userProfileInfo.username)
-      setBio(userProfileInfo.bio)
-      setAddress(userProfileInfo.address)
-      setBirthDate(userProfileInfo.birthDate)
-    }
-  }, [userProfileInfo])
+    if (!user) return
+    setUserInfo({
+      username: user.username,
+      bio: user.bio,
+      address: user.address,
+      birthDate: user.birthDate,
+    })
+  }, [user])
 
-  //
   return (
     <>
       <section className='mt-5'>
@@ -68,14 +63,14 @@ const Profile = () => {
         <form onSubmit={(e) => submitHandler(e)}>
           <input disabled value={currentUser.email} type='email' className='form-control mb-3' />
           <input
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target }) => setUserInfo({ ...userInfo, username: target.value })}
             value={username}
             placeholder='username'
             className='form-control mb-3'
             type='text'
           />
           <input
-            onChange={({ target }) => setBio(target.value)}
+            onChange={({ target }) => setUserInfo({ ...userInfo, bio: target.value })}
             value={bio}
             placeholder='bio'
             type='text'
@@ -83,18 +78,18 @@ const Profile = () => {
           />
 
           <textarea
-            onChange={({ target }) => setAddress(target.value)}
+            onChange={({ target }) => setUserInfo({ ...userInfo, address: target.value })}
             value={address}
             placeholder='Address'
             className='form-control mb-3'
           />
           <input
-            onChange={({ target }) => setFile(target.files[0])}
+            onChange={({ target }) => setUserInfo({ ...userInfo, file: target.files[0] })}
             type='file'
             className='form-control mb-3'
           />
           <input
-            onChange={({ target }) => setBirthDate(target.value)}
+            onChange={({ target }) => setUserInfo({ ...userInfo, birthDate: target.value })}
             value={birthDate}
             type='date'
             className='form-control mb-3'

@@ -7,7 +7,6 @@ const PortfolioContext = createContext()
 const PortfolioProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
 
-  const [userProfileInfo, setUserProfileInfo] = useState({})
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [user, setUser] = useState(null)
@@ -15,23 +14,6 @@ const PortfolioProvider = ({ children }) => {
 
   const isUserExists = (username) => {
     return db.collection('users').where('username', '==', username).get()
-  }
-
-  const getUsersProfile = () => {
-    db.collection('users').onSnapshot((snapshot) => {
-      const _filteredUsers = snapshot.docs.filter((_doc) => {
-        return _doc.data().username !== '' ? true : false
-      })
-
-      const _users = _filteredUsers.map((_doc) => {
-        return {
-          docId: _doc.id,
-          ..._doc.data(),
-        }
-      })
-
-      setUsers(_users)
-    })
   }
 
   const updateUserProfile = (info) => {
@@ -99,24 +81,34 @@ const PortfolioProvider = ({ children }) => {
         setMessage('user profile info was updated successfully')
       })
 
-    setUserProfileInfo({
-      username: info.username,
-      bio: info.bio,
-      address: info.address,
-      birthDate: info.birthDate,
-    })
-
     setTimeout(() => {
       setMessage(null)
     }, 2500)
   }
 
-  const getCurrentUser = () => {
+  useEffect(() => {
+    db.collection('users').onSnapshot((snapshot) => {
+      const _filteredUsers = snapshot.docs.filter((_doc) => {
+        return _doc.data().username !== '' ? true : false
+      })
+
+      const _users = _filteredUsers.map((_doc) => {
+        return {
+          docId: _doc.id,
+          ..._doc.data(),
+        }
+      })
+
+      setUsers(_users)
+    })
+  }, [])
+
+  useEffect(() => {
     if (!currentUser) return
 
     const _docRef = db.collection('users').doc(currentUser.email)
 
-    _docRef.get().then((_doc) => {
+    _docRef.onSnapshot((_doc) => {
       if (_doc.exists) {
         setUser({
           docId: _doc.id,
@@ -124,33 +116,10 @@ const PortfolioProvider = ({ children }) => {
         })
       }
     })
-  }
-
-  useEffect(() => {
-    getUsersProfile()
-  }, [])
-
-  useEffect(() => {
-    getCurrentUser()
-
-    // TODO:
-    if (currentUser) {
-      const docRef = db.collection('users').doc(currentUser.email).get()
-
-      docRef.then((_doc) => {
-        if (_doc.exists) {
-          setUserProfileInfo({
-            docId: _doc.id,
-            ..._doc.data(),
-          })
-        }
-      })
-    }
   }, [currentUser])
 
   const values = {
     updateUserProfile,
-    userProfileInfo,
     users,
     isUserExists,
     message,
