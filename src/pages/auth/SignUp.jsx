@@ -26,6 +26,10 @@ const SignUp = () => {
           db.collection('users')
             .doc(email)
             .set({
+              username: '',
+              bio: '',
+              address: '',
+              birthDate: '',
               uid: user.uid,
               lastLoggedIn: timestamp(),
             })

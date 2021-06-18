@@ -78,6 +78,10 @@ const Portfolio = () => {
                 <li className='list-group-item'>
                   <b>Address:</b> {userInfo.address}
                 </li>
+                <li className='list-group-item'>
+                  <b>Last Logged In:</b>{' '}
+                  {new Date(userInfo?.lastLoggedIn?.toDate()).toDateString()}
+                </li>
               </ul>
             </div>
           </div>
