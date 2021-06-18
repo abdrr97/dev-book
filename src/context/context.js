@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-} from 'react'
+import React, { useState, useEffect, createContext, useContext } from 'react'
 import { db, storage, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 
@@ -16,12 +11,10 @@ const PortfolioProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [user, setUser] = useState(null)
+  const [progress, setProgress] = useState(0)
 
   const isUserExists = (username) => {
-    return db
-      .collection('users')
-      .where('username', '==', username)
-      .get()
+    return db.collection('users').where('username', '==', username).get()
   }
 
   const getUsersProfile = () => {
@@ -76,20 +69,21 @@ const PortfolioProvider = ({ children }) => {
         'state_changed',
         (snap) => {
           // uploading
-          const percentage =
-            (snap.bytesTransferred / snap.totalBytes) * 100
-          // setProgress(percentage)
+          const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+          setProgress(_percentage)
         },
-        (err) => {
-          // on error
-          // setError(err)
-        },
+        (err) => {},
         () => {
           // on finish upload
           stgRef.getDownloadURL().then((url) => {
-            _docRef.update({
-              photoURL: url,
-            })
+            _docRef
+              .update({
+                photoURL: url,
+              })
+              .finally(() => {
+                setMessage('user profile image was updated successfully')
+                setProgress(0)
+              })
           })
         }
       )
@@ -141,10 +135,7 @@ const PortfolioProvider = ({ children }) => {
 
     // TODO:
     if (currentUser) {
-      const docRef = db
-        .collection('users')
-        .doc(currentUser.email)
-        .get()
+      const docRef = db.collection('users').doc(currentUser.email).get()
 
       docRef.then((_doc) => {
         if (_doc.exists) {
@@ -164,11 +155,10 @@ const PortfolioProvider = ({ children }) => {
     isUserExists,
     message,
     user,
+    progress,
   }
 
-  return (
-    <PortfolioContext.Provider value={values} children={children} />
-  )
+  return <PortfolioContext.Provider value={values} children={children} />
 }
 
 export { PortfolioContext, PortfolioProvider }
