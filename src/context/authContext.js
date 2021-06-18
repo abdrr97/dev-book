@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-
 import { auth, db } from '../firebase'
+import PageLoading from '../components/PageLoading'
 
 const AuthContext = React.createContext()
 
@@ -47,8 +47,6 @@ const AuthProvider = ({ children }) => {
         })
       }
     }
-
-    return () => {}
   }, [currentUser])
 
   useEffect(() => {
@@ -71,7 +69,7 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={values}
-      children={!isLoading ? children : <h1>Loading ...</h1>}
+      children={!isLoading ? children : <PageLoading />}
     />
   )
 }

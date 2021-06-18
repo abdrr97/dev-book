@@ -9,6 +9,7 @@ const PortfolioProvider = ({ children }) => {
 
   const [userProfileInfo, setUserProfileInfo] = useState(null)
   const [users, setUsers] = useState([])
+  const [message, setMessage] = useState('')
 
   const isUserExists = (username) => {
     return db.collection('users').where('username', '==', username).get()
@@ -31,7 +32,7 @@ const PortfolioProvider = ({ children }) => {
     })
   }
 
-  const userProfile = (info) => {
+  const setUserProfile = (info) => {
     if (!currentUser) return
     let exists = false
     const _docRef = db.collection('users').doc(currentUser.email)
@@ -51,12 +52,18 @@ const PortfolioProvider = ({ children }) => {
           _docRef.update({
             username: info.username,
           })
+          setMessage('user was updated successfully')
         }
       })
 
     _docRef.update({
       bio: info.bio,
     })
+    setMessage('bio was updated successfully')
+
+    setTimeout(() => {
+      setMessage(null)
+    }, 2500)
   }
 
   useEffect(() => {
@@ -69,13 +76,22 @@ const PortfolioProvider = ({ children }) => {
 
       docRef.then((_doc) => {
         if (_doc.exists) {
-          setUserProfileInfo(_doc.data())
+          setUserProfileInfo({
+            docId: _doc.id,
+            ..._doc.data(),
+          })
         }
       })
     }
   }, [currentUser])
 
-  const values = { userProfile, userProfileInfo, users, isUserExists }
+  const values = {
+    setUserProfile,
+    userProfileInfo,
+    users,
+    isUserExists,
+    message,
+  }
 
   return <PortfolioContext.Provider value={values} children={children} />
 }

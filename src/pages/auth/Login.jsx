@@ -16,13 +16,11 @@ const Login = () => {
     try {
       setError('')
       login(email, password)
-        .then(() => {
-          history.push('/profile')
-        })
         .catch((err) => {
           setError(err.message)
         })
         .finally(() => {
+          history.push('/')
           setIsLoading(false)
         })
     } catch (ex) {
