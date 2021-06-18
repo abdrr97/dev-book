@@ -21,6 +21,7 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
+    console.log(userInfo)
     if (username.trim() !== '') {
       updateUserProfile(userInfo)
     }
@@ -29,10 +30,10 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       setUserInfo({
-        username: user.username,
-        bio: user.bio,
-        address: user.address,
-        birthDate: user.birthDate,
+        username: user.username || '',
+        bio: user.bio || '',
+        address: user.address || '',
+        birthDate: user.birthDate || '',
       })
     }
   }, [user])
