@@ -94,7 +94,7 @@ const PortfolioProvider = ({ children }) => {
 
   useEffect(() => {
     // getting users only if they have a username
-    db.collection('users').onSnapshot((snapshot) => {
+    const unsubscribe = db.collection('users').onSnapshot((snapshot) => {
       const _users = snapshot.docs
         .filter((_doc) => {
           return _doc.data().username !== '' ? true : false
@@ -108,6 +108,7 @@ const PortfolioProvider = ({ children }) => {
 
       setUsers(_users)
     })
+    return unsubscribe
   }, [])
 
   useEffect(() => {
@@ -116,7 +117,7 @@ const PortfolioProvider = ({ children }) => {
     // getting the current logged-in user his info (username, bio, age, ...)
     const _docRef = db.collection('users').doc(currentUser.email)
 
-    _docRef.onSnapshot((_doc) => {
+    const unsubscribe = _docRef.onSnapshot((_doc) => {
       if (_doc.exists) {
         setUser({
           docId: _doc.id,
@@ -124,6 +125,8 @@ const PortfolioProvider = ({ children }) => {
         })
       }
     })
+
+    return unsubscribe
   }, [currentUser])
 
   const values = {

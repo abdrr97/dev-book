@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 // components
@@ -16,18 +16,30 @@ import Portfolio from './pages/Portfolio'
 import PrivateRoute from './routes/PrivateRoute'
 import Navbar from './components/Navbar'
 import ChatRoom from './pages/ChatRoom'
+import { AuthContext } from './context/authContext'
+import { db } from './firebase'
+import vis from 'ifvisible.js'
 
 export const App = () => {
-  // const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useContext(AuthContext)
+  useEffect(() => {
+    if (!currentUser) return
 
-  // useEffect(() => {
-  //   window.addEventListener('beforeunload', (ev) => {
-  //     const docRef = db.collection('users').doc(currentUser.email)
-  //     return docRef.update({
-  //       online: false,
-  //     })
-  //   })
-  // }, [currentUser])
+    const docRef = db.collection('users').doc(currentUser.email)
+
+    vis.on('idle', function () {
+      return docRef.update({
+        online: false,
+      })
+    })
+
+    vis.on('wakeup', function () {
+      return docRef.update({
+        online: true,
+      })
+    })
+    vis.setIdleDuration(10)
+  }, [currentUser])
 
   return (
     <>
