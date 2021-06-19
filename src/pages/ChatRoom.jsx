@@ -88,10 +88,16 @@ const ChatRoom = () => {
                           {docId}
                         </button>
                       </div>
-
                       <span className={online ? 'text-success' : 'text-danger'}>
                         <RiRadioButtonLine />
                       </span>
+                      {notifications &&
+                        notifications.from &&
+                        notifications.from.email.includes(docId) && (
+                          <span className={'text-danger'}>
+                            <RiRadioButtonLine />
+                          </span>
+                        )}
                     </li>
                   )
                 })}

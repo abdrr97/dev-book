@@ -18,22 +18,55 @@ const Navbar = () => {
   const history = useHistory()
 
   useEffect(() => {
-    if ('Notification' in window) {
-      Notification.requestPermission()
+    if (!window.Notification) {
+      console.log('Browser does not support notifications.')
     } else {
-      return
+      // check if permission is already granted
+      if (Notification.permission === 'granted') {
+        // show notification here
+        if (
+          notifications &&
+          notifications.from &&
+          notifications.to.includes(currentUser.email)
+        ) {
+          // doesn't work in mobile yet
+          const options = {
+            body: notifications.from.message,
+            icon: notifications.from.photoURL,
+          }
+          const notification = new Notification(
+            `New message from ${notifications.from.username}`,
+            options
+          )
+          notification.onclick = () => {
+            Promise.allSettled([
+              setSelectedUser({
+                ...notifications.from,
+              }),
+              setNotifications({
+                read: true,
+                from: null,
+              }),
+              changeNotificationStatus(),
+            ]).then(() => {
+              history.push('/chat-room')
+            })
+          }
+        }
+      } else {
+        // request permission from user
+        Notification.requestPermission()
+          .then(function (p) {
+            if (p === 'denied') {
+              // show notification here
+              console.log('User blocked notifications.')
+            }
+          })
+          .catch(function (err) {
+            console.error(err)
+          })
+      }
     }
-    if (
-      notifications &&
-      notifications.from &&
-      notifications.to.includes(currentUser.email)
-    ) {
-      // doesn't work in mobile yet
-      new Notification(
-        `You have new messages from ${notifications.from.username}`
-      )
-    }
-    console.log('notify')
   }, [currentUser, notifications])
 
   return (
