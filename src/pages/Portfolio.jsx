@@ -81,10 +81,7 @@ const Portfolio = () => {
                 </li>
                 <li className='list-group-item'>
                   <b>Last Logged In:</b>
-                  {moment(
-                    userInfo?.lastLoggedIn?.toDate(),
-                    'MMDDYYYY'
-                  ).fromNow()}
+                  {moment(userInfo?.lastLoggedIn?.toDate(), 'MMDDYY').fromNow()}
                 </li>
               </ul>
             </div>

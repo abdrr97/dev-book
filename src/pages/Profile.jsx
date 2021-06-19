@@ -21,7 +21,6 @@ const Profile = () => {
   const submitHandler = (e) => {
     e.preventDefault()
 
-    console.log(userInfo)
     if (username.trim() !== '') {
       updateUserProfile(userInfo)
     }

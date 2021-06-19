@@ -10,8 +10,14 @@ import moment from 'moment'
 const ChatRoom = () => {
   const { currentUser } = useContext(AuthContext)
   const { users } = useContext(PortfolioContext)
-  const { messages, startConversation, selectedUser, setSelectedUser } =
-    useContext(ChatContext)
+  const {
+    messages,
+    setNotifications,
+    startConversation,
+    selectedUser,
+    setSelectedUser,
+    notifications,
+  } = useContext(ChatContext)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -33,6 +39,8 @@ const ChatRoom = () => {
     }, 2500)
   }
 
+  // set notifications
+
   // scroll down when a message is added to the chat
   const down = useRef()
   useEffect(() => {
@@ -50,29 +58,36 @@ const ChatRoom = () => {
               users
                 // => this filter is if you want to message your self (if you are crazy enough)
                 .filter((_user) => _user.docId !== currentUser.email)
-                .map((_user, idx) => {
-                  const { uid, username, docId, online } = _user
+                .map((_user) => {
+                  const { uid, docId, online, photoURL, username } = _user
                   return (
                     <li
                       key={uid}
                       className='list-group-item d-flex justify-content-between'
                     >
-                      <button
-                        className={
-                          selectedUser?.uid === uid
-                            ? 'btn btn-sm btn-primary'
-                            : 'btn btn-sm btn-outline-primary'
-                        }
-                        onClick={() =>
-                          setSelectedUser({
-                            ..._user,
-                            email: _user.docId,
-                          })
-                        }
-                      >
-                        {username}
-                        <small> - {docId}</small>
-                      </button>
+                      <div className=''>
+                        <img
+                          width='50'
+                          className='img-thumbnail'
+                          src={photoURL}
+                          alt={username}
+                        />
+                        <button
+                          className={
+                            selectedUser?.uid === uid
+                              ? 'btn btn-sm btn-primary'
+                              : 'btn btn-sm btn-outline-primary'
+                          }
+                          onClick={() =>
+                            setSelectedUser({
+                              ..._user,
+                              email: _user.docId,
+                            })
+                          }
+                        >
+                          {docId}
+                        </button>
+                      </div>
 
                       <span className={online ? 'text-success' : 'text-danger'}>
                         <RiRadioButtonLine />
@@ -88,8 +103,18 @@ const ChatRoom = () => {
           {error && <div className='alert alert-warning'>{error}</div>}
           <div
             className='list-group mb-3'
-            style={{ maxHeight: '300px', overflowY: 'scroll' }}
+            style={{
+              maxHeight: '300px',
+              minHeight: '300px',
+              overflowY: 'scroll',
+              scrollBehavior: 'smooth',
+            }}
           >
+            {!selectedUser.uid && (
+              <div className='text-center'>
+                <h3 className='fw-light'>No Selected User</h3>
+              </div>
+            )}
             {messages.map(({ message, uid, email, createdAt }, idx) => {
               return (
                 <section

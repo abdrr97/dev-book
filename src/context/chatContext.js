@@ -9,6 +9,7 @@ const ChatProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
   const { user } = useContext(PortfolioContext)
   const [messages, setMessages] = useState([])
+  const [notifications, setNotifications] = useState(null)
   const [selectedUser, setSelectedUser] = useState({})
   // this is pretty complicated logic to make a comment on 🙄
 
@@ -24,28 +25,64 @@ const ChatProvider = ({ children }) => {
     const from = usersColRef.doc(currentUser.email)
     const chatRoomName = selectedUser.email + ' ' + currentUser.email
 
-    from.update({
-      room: chatRoomName,
-    })
-    to.update({
-      room: chatRoomName,
-    })
-
-    db.collection('messages').add({
+    const _message = {
       uid: currentUser.uid,
       email: currentUser.email,
       roomName: chatRoomName,
       message: message,
       username: user.username,
+      photoURL: user.photoURL,
       createdAt: timestamp(),
+    }
+
+    from
+      .update({
+        room: chatRoomName,
+      })
+      .then(() => {
+        to.update({
+          room: chatRoomName,
+        }).then(() => {
+          db.collection('messages')
+            .add(_message)
+            .finally(() => {
+              db.collection('notifications').doc(selectedUser.email).set({
+                read: false,
+                from: _message,
+              })
+            })
+        })
+      })
+  }
+
+  // change notification status in db
+  const changeNotificationStatus = () => {
+    db.collection('notifications').doc(currentUser.email).update({
+      read: true,
+      from: null,
     })
   }
+
+  // listening to notification in db
+  useEffect(() => {
+    if (!currentUser) return
+
+    const unsubscribe = db
+      .collection('notifications')
+      .doc(currentUser.email)
+      .onSnapshot((_doc) => {
+        if (_doc.exists) {
+          const notify = { to: _doc.id, ..._doc.data() }
+          setNotifications(notify)
+        }
+      })
+
+    return unsubscribe
+  }, [currentUser])
 
   useEffect(() => {
     if (!currentUser) return
     if (!selectedUser) return
-    const chatRoomName1 = selectedUser.email + ' ' + currentUser.email
-    const chatRoomName2 = currentUser.email + ' ' + selectedUser.email
 
     const unsubscribe = db
       .collection('messages')
@@ -53,15 +90,10 @@ const ChatProvider = ({ children }) => {
       .onSnapshot((snapshot) => {
         const _messages = snapshot.docs
           .filter((_doc) => {
-            const _message = {
-              docId: _doc.id,
-              ..._doc.data(),
-            }
-
-            return _message.roomName === chatRoomName1 ||
-              _message.roomName === chatRoomName2
-              ? true
-              : false
+            return (
+              _doc.data().roomName.includes(currentUser.email) &&
+              _doc.data().roomName.includes(selectedUser.email)
+            )
           })
           .map((_doc) => {
             return {
@@ -81,6 +113,9 @@ const ChatProvider = ({ children }) => {
     messages,
     setSelectedUser,
     selectedUser,
+    setNotifications,
+    notifications,
+    changeNotificationStatus,
   }
 
   return <ChatContext.Provider value={values} children={children} />

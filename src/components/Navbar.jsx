@@ -1,13 +1,41 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { PortfolioContext } from '../context/context'
 import { BsBellFill } from 'react-icons/bs'
+import { ChatContext } from '../context/chatContext'
 // this is a very basic component
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
   const { user } = useContext(PortfolioContext)
+  const {
+    setNotifications,
+    notifications,
+    setSelectedUser,
+    changeNotificationStatus,
+  } = useContext(ChatContext)
+  const history = useHistory()
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      Notification.requestPermission()
+    } else {
+      return
+    }
+    if (
+      notifications &&
+      notifications.from &&
+      notifications.to.includes(currentUser.email)
+    ) {
+      // doesn't work in mobile yet
+      new Notification(
+        `You have new messages from ${notifications.from.username}`
+      )
+    }
+    console.log('notify')
+  }, [currentUser, notifications])
+
   return (
     <>
       <nav className='navbar navbar-expand navbar-light bg-light'>
@@ -21,10 +49,31 @@ const Navbar = () => {
               {currentUser ? (
                 <>
                   <li className='nav-item'>
-                    <button className='btn-notification mx-2 btn nav-link'>
+                    <button
+                      onClick={() => {
+                        Promise.allSettled([
+                          setSelectedUser({
+                            ...notifications.from,
+                          }),
+                          setNotifications({
+                            read: true,
+                            from: null,
+                          }),
+                          changeNotificationStatus(),
+                        ]).then(() => {
+                          history.push('/chat-room')
+                        })
+                      }}
+                      className='btn-notification mx-2 btn nav-link'
+                    >
                       <BsBellFill />
-                      <span className='notification'></span>
+                      {notifications && notifications.from && (
+                        <span className='notification'></span>
+                      )}
                     </button>
+                    {notifications && notifications.from && (
+                      <div>{notifications.from.username}</div>
+                    )}
                   </li>
                   {user && (
                     <li className='nav-item'>

@@ -52,7 +52,7 @@ const PortfolioProvider = ({ children }) => {
     const types = ['image/png', 'image/jpeg']
 
     if (file && types.includes(file.type)) {
-      const stgRef = storage.ref(file.name)
+      const stgRef = storage.ref(currentUser.uid)
       stgRef.put(file).on(
         'state_changed',
         (snap) => {
