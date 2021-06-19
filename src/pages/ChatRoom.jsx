@@ -12,7 +12,6 @@ const ChatRoom = () => {
   const { users } = useContext(PortfolioContext)
   const {
     messages,
-    setNotifications,
     startConversation,
     selectedUser,
     setSelectedUser,

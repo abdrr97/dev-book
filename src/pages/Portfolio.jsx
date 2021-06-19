@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PortfolioContext } from '../context/context'
-import moment from 'moment'
+import Hero from '../components/portfolio/Hero'
+import Profile from '../components/portfolio/Profile'
+import PageLoading from '../components/PageLoading'
 
 const Portfolio = () => {
   const { username } = useParams()
@@ -40,53 +42,15 @@ const Portfolio = () => {
 
   // show this if still loading
   if (loading) {
-    return (
-      <div className='text-center'>
-        <h1 className='display-1'>...Searching for user</h1>
-      </div>
-    )
+    return <PageLoading />
   }
 
   // show this if user was found
   if (exists) {
     return (
       <>
-        <section className='mt-5'>
-          <h1 className='display-3'>Portfolio</h1>
-          <div className='card'>
-            <div className='card-body'>
-              <img
-                width='100'
-                className='img-thumbnail mb-3'
-                src={userInfo.photoURL}
-                alt={userInfo.username}
-              />
-
-              <ul className='list-group '>
-                <li className='list-group-item'>
-                  <b>email:</b> {userInfo.docId}
-                </li>
-                <li className='list-group-item'>
-                  <b>username:</b> {userInfo.username}
-                </li>
-                <li className='list-group-item'>
-                  <b>bio:</b> {userInfo.bio}
-                </li>
-                <li className='list-group-item'>
-                  <b>Birth </b>Date:
-                  {userInfo.birthDate}
-                </li>
-                <li className='list-group-item'>
-                  <b>Address:</b> {userInfo.address}
-                </li>
-                <li className='list-group-item'>
-                  <b>Last Logged In:</b>
-                  {moment(userInfo?.lastLoggedIn?.toDate(), 'MMDDYY').fromNow()}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
+        <Hero userInfo={userInfo} />
+        <Profile userInfo={userInfo} />
       </>
     )
   }

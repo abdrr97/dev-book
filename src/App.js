@@ -38,26 +38,23 @@ export const App = () => {
         online: true,
       })
     })
-    vis.setIdleDuration(10)
   }, [currentUser])
 
   return (
     <>
       <Router>
         <Navbar />
-        <main className='container'>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path='/log-in' component={Login} />
-            <Route path='/sign-up' component={SignUp} />
-            <Route path='/forgot-password' component={ForgotPassword} />
-            <PrivateRoute path='/profile' component={Profile} />
-            <PrivateRoute path='/chat-room' component={ChatRoom} />
-            <Route path='/p/:username' component={Portfolio} />
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/log-in' component={Login} />
+          <Route path='/sign-up' component={SignUp} />
+          <Route path='/forgot-password' component={ForgotPassword} />
+          <PrivateRoute path='/profile' component={Profile} />
+          <PrivateRoute path='/chat-room' component={ChatRoom} />
+          <Route path='/p/:username' component={Portfolio} />
 
-            <Route path='*' component={NotFound} />
-          </Switch>
-        </main>
+          <Route path='*' component={NotFound} />
+        </Switch>
       </Router>
     </>
   )

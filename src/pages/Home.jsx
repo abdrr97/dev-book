@@ -13,7 +13,7 @@ const Home = () => {
 
   return (
     <>
-      <section className='mt-5'>
+      <main className='container mt-5'>
         <h3 className='display-3 mb-3'>Home</h3>
 
         {users.length === 0 && (
@@ -39,11 +39,12 @@ const Home = () => {
                     }
                   </div>
                   <div className='card-body'>
-                    {bio || (
+                    {bio.substring(0, 150) || (
                       <small>
                         <i>no bio for this user</i>
                       </small>
                     )}
+                    ...
                   </div>
                   {currentUser && (
                     <div className='card-footer'>
@@ -67,7 +68,7 @@ const Home = () => {
             )
           })}
         </div>
-      </section>
+      </main>
     </>
   )
 }

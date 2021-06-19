@@ -7,6 +7,7 @@ import { PortfolioProvider } from './context/context'
 import { App } from './App'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './style.css'
 import './index.css'
 
 const root = document.getElementById('root')

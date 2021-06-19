@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
@@ -67,7 +68,7 @@ const Navbar = () => {
           })
       }
     }
-  }, [currentUser, notifications])
+  }, [notifications])
 
   return (
     <>
