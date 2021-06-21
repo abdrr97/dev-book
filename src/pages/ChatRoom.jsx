@@ -87,7 +87,15 @@ const ChatRoom = () => {
                           {docId}
                         </button>
                       </div>
-                      <span className={online ? 'text-success' : 'text-danger'}>
+                      <span
+                        className={
+                          online === 'ONLINE'
+                            ? 'text-success'
+                            : online === 'OFFLINE'
+                            ? 'text-danger'
+                            : 'text-warning'
+                        }
+                      >
                         <RiRadioButtonLine />
                       </span>
                       {notifications &&

@@ -5,7 +5,7 @@ import { ChatContext } from '../../context/chatContext'
 
 const Hero = ({ userInfo }) => {
   const { setSelectedUser } = useContext(ChatContext)
-  const { online, photoURL, username } = userInfo
+  const { photoURL, username } = userInfo
 
   const history = useHistory()
 

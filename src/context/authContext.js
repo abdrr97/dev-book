@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
     const docRef = db.collection('users').doc(currentUser.email)
     return docRef
       .update({
-        online: false,
+        online: 'OFFLINE',
         lastLoggedIn: timestamp(),
       })
       .finally(() => {
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
     // change user's status to online when he log-in
     const docRef = db.collection('users').doc(currentUser.email)
     docRef.update({
-      online: true,
+      online: 'ONLINE',
       // lastLoggedIn: timestamp(),
     })
   }, [currentUser])

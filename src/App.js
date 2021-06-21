@@ -29,13 +29,13 @@ export const App = () => {
 
     vis.on('idle', function () {
       return docRef.update({
-        online: false,
+        online: 'BUSY',
       })
     })
 
     vis.on('wakeup', function () {
       return docRef.update({
-        online: true,
+        online: 'ONLINE',
       })
     })
   }, [currentUser])

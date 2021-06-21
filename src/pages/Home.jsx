@@ -33,7 +33,15 @@ const Home = () => {
                   <div className='card-header d-flex justify-content-between align-items-center'>
                     <Link to={`/p/${username}`}>{username}</Link>
                     {
-                      <span className={online ? 'text-success' : 'text-danger'}>
+                      <span
+                        className={
+                          online === 'ONLINE'
+                            ? 'text-success'
+                            : online === 'OFFLINE'
+                            ? 'text-danger'
+                            : 'text-warning'
+                        }
+                      >
                         <RiRadioButtonLine />
                       </span>
                     }
