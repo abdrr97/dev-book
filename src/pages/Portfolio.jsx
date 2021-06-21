@@ -50,7 +50,6 @@ const Portfolio = () => {
     return (
       <>
         <Hero userInfo={userInfo} />
-        <Profile userInfo={userInfo} />
       </>
     )
   }

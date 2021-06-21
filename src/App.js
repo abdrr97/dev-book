@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 // components
-// import { Navbar, Sidebar, Footer } from './components'
 // pages
 import { Home, NotFound, Profile } from './pages'
 
@@ -15,6 +14,7 @@ import Portfolio from './pages/Portfolio'
 // private route
 import PrivateRoute from './routes/PrivateRoute'
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import ChatRoom from './pages/ChatRoom'
 import { AuthContext } from './context/authContext'
 import { db } from './firebase'
@@ -56,6 +56,7 @@ export const App = () => {
 
           <Route path='*' component={NotFound} />
         </Switch>
+        <Footer></Footer>
       </Router>
     </>
   )

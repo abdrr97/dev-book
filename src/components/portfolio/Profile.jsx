@@ -3,7 +3,7 @@ import React from 'react'
 import Skills from './Skills'
 
 const Profile = ({ userInfo }) => {
-  const { bio, username, email, birthDate, skills } = userInfo
+  const { bio, username, email, birthDate } = userInfo
 
   // TODO: icons
   return (
@@ -87,9 +87,7 @@ const Profile = ({ userInfo }) => {
                       </div>
                     </div>
                   </div>
-                  <div class='col-lg-8 col-md-7 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0'>
-                    <Skills skills={skills} />
-                  </div>
+
                   <div className='col-md-6 mt-4 pt-2 pt-sm-0'>
                     <h5>Experience :</h5>
 

@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { RiRadioButtonLine } from 'react-icons/ri'
 import { ChatContext } from '../context/chatContext'
 import { AuthContext } from '../context/authContext'
+import { BsHeartFill } from 'react-icons/bs'
 
 const Home = () => {
   const { users } = useContext(PortfolioContext)
@@ -24,58 +25,77 @@ const Home = () => {
           </div>
         )}
 
-        <div className='row'>
+        <section className='row'>
           {users.map((_user, idx) => {
-            const { bio, username, online } = _user
+            const { bio, username, online, photoURL, skills } = _user
             return (
-              <div key={idx} className='col-3 col-md-4 col-sm-6 col-lg-3'>
-                <div className='card mb-5'>
-                  <div className='card-header d-flex justify-content-between align-items-center'>
-                    <Link to={`/p/${username}`}>{username}</Link>
-                    {
-                      <span
-                        className={
-                          online === 'ONLINE'
-                            ? 'text-success'
-                            : online === 'OFFLINE'
-                            ? 'text-danger'
-                            : 'text-warning'
-                        }
-                      >
-                        <RiRadioButtonLine />
-                      </span>
-                    }
-                  </div>
+              <article key={idx} className='col-lg-4 col-md-6 col-12 mt-4 pt-2'>
+                <div className='candidate-list card rounded border-0 shadow'>
                   <div className='card-body'>
-                    {bio.substring(0, 150) || (
-                      <small>
-                        <i>no bio for this user</i>
-                      </small>
-                    )}
-                    ...
-                  </div>
-                  {currentUser && (
-                    <div className='card-footer'>
-                      {/* setting up the selected user for you to chat with  */}
-                      <button
-                        className='btn btn-sm btn-primary'
-                        onClick={() => {
-                          setSelectedUser({
-                            ..._user,
-                            email: _user.docId,
-                          })
-                          history.push('/chat-room')
-                        }}
-                      >
-                        send message
-                      </button>
+                    <ul className='list-unstyled align-items-center'>
+                      <li className='list-inline-item'>
+                        <span
+                          className={
+                            online === 'ONLINE'
+                              ? 'badge rounded-pill bg-soft-success'
+                              : online === 'OFFLINE'
+                              ? 'badge rounded-pill bg-soft-danger'
+                              : 'badge rounded-pill bg-soft-warning'
+                          }
+                        >
+                          <RiRadioButtonLine />
+                        </span>
+                      </li>
+                    </ul>
+
+                    <div className='content text-center'>
+                      <img
+                        src={photoURL}
+                        alt={username}
+                        className='avatar avatar-md-md shadow-md rounded-circle'
+                      />
+                      <ul className='list-unstyled mb-1 mt-2'></ul>
+                      <Link to={`/p/${username}`} className='text-dark h5 name'>
+                        {username}
+                      </Link>
+                      <ul className='list-unstyled mt-3'>
+                        {skills &&
+                          skills.map(({ id, language }) => {
+                            return (
+                              <li key={id} className='list-inline-item m-1'>
+                                <span className='rounded bg-light py-1 px-2 text-muted small'>
+                                  {language}
+                                </span>
+                              </li>
+                            )
+                          })}
+                      </ul>
+
+                      <p className='text-muted my-1'>Front-end Developer</p>
+
+                      <span className='text-muted'>
+                        <i className='uil uil-graduation-cap h4 mb-0 me-2 text-primary'></i>
+                        Experience
+                        <span className='text-success'>3+ years</span>
+                      </span>
+
+                      <ul className='list-unstyled mt-3'></ul>
+                      <div className='d-grid'>
+                        <Link
+                          to={`/p/${username}`}
+                          className='btn btn-soft-primary'
+                        >
+                          Read More
+                          <i className='uil uil-angle-right-b align-middle'></i>
+                        </Link>
+                      </div>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              </article>
             )
           })}
-        </div>
+        </section>
       </main>
     </>
   )

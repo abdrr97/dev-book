@@ -1,6 +1,4 @@
 import React from 'react'
-import { BsTypeH1 } from 'react-icons/bs'
-
 const Skills = ({ skills }) => {
   return (
     <>

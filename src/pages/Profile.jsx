@@ -6,8 +6,14 @@ import { FiTrash2 } from 'react-icons/fi'
 // i refactored this to be much cleaner and more understandable
 const Profile = () => {
   const { currentUser } = useContext(AuthContext)
-  const { progress, updateUserProfile, message, user, removeSkill } =
-    useContext(PortfolioContext)
+  const {
+    progress,
+    updateUserProfile,
+    message,
+    user,
+    updateSkill,
+    updateExperience,
+  } = useContext(PortfolioContext)
 
   const [userInfo, setUserInfo] = useState({
     username: '',
@@ -18,15 +24,29 @@ const Profile = () => {
     skills: [],
   })
 
-  const { username, bio, address, birthDate, skills } = userInfo
-
-  const [language, setLanguage] = useState('HTML')
+  const { username, bio, address, birthDate, skills, experience } = userInfo
+  // Skills
+  const [language, setLanguage] = useState('')
   const [percentage, setPercentage] = useState(0)
   const [skillsList, setSkillsList] = useState([])
+
+  // Exp
+  const [year, setYear] = useState('')
+  const [title, setTitle] = useState('')
+  const [company, setCompany] = useState('')
+  const [description, setDescription] = useState('')
+  const [expList, setExpList] = useState([])
 
   const submitHandler = (e) => {
     e.preventDefault()
 
+    if (username.trim() !== '') {
+      updateUserProfile(userInfo)
+    }
+  }
+
+  const submitSkillHandler = (e) => {
+    e.preventDefault()
     // add skills
     userInfo.skills = [
       ...skills,
@@ -36,10 +56,28 @@ const Profile = () => {
         percentage,
       },
     ]
+    updateSkill(userInfo.skills)
+    setPercentage(0)
+  }
 
-    if (username.trim() !== '') {
-      updateUserProfile(userInfo)
-    }
+  const submitExperienceHandler = (e) => {
+    e.preventDefault()
+    // add skills
+    userInfo.experience = [
+      ...experience,
+      {
+        id: Date.now(),
+        year,
+        title,
+        company,
+        description,
+      },
+    ]
+    updateExperience(userInfo.experience)
+    setYear('')
+    setTitle('')
+    setCompany('')
+    setDescription('')
   }
 
   useEffect(() => {
@@ -51,8 +89,11 @@ const Profile = () => {
         birthDate: user.birthDate || '',
         // skills
         skills: user.skills || [],
+        // experience
+        experience: user.experience || [],
       })
       setSkillsList(user.skills)
+      setExpList(user.experience)
     }
   }, [user])
 
@@ -138,7 +179,12 @@ const Profile = () => {
               type='date'
               className='form-control mb-3'
             />
-            <hr className='my-5' />
+            <button className='btn btn-primary mb-3'>Save</button>
+          </div>
+        </form>
+
+        <form onSubmit={(e) => submitSkillHandler(e)} className='card mb-3'>
+          <div className='card-body'>
             <h3>Skills</h3>
             <label htmlFor='lang'>Language - {language}</label>
             <select
@@ -163,6 +209,8 @@ const Profile = () => {
               min='0'
               max='100'
             />
+            <h5>Skills List</h5>
+            {skillsList.length === 0 && 'no skills yet'}
             <ul className='list-group mb-3'>
               {skillsList.map(({ language, percentage, id }) => {
                 return (
@@ -174,7 +222,7 @@ const Profile = () => {
                     <button
                       onClick={() => {
                         setSkillsList(skillsList.filter((s) => s.id !== id))
-                        removeSkill(skillsList.filter((s) => s.id !== id))
+                        updateSkill(skillsList.filter((s) => s.id !== id))
                       }}
                       type='button'
                       className='btn btn-sm btn-outline-danger'
@@ -185,7 +233,71 @@ const Profile = () => {
                 )
               })}
             </ul>
-            <button className='btn btn-primary mb-3 '>Save</button>
+            <button className='btn btn-primary mb-3'>Save</button>
+          </div>
+        </form>
+
+        <form onSubmit={(e) => submitExperienceHandler(e)} className='card'>
+          <div className='card-body'>
+            <h3>Experience</h3>
+
+            <input
+              onChange={({ target }) => setYear(target.value)}
+              value={year}
+              placeholder='Year'
+              className='form-control mb-3'
+              type='text'
+            />
+            <input
+              onChange={({ target }) => setTitle(target.value)}
+              value={title}
+              placeholder='Title'
+              className='form-control mb-3'
+              type='text'
+            />
+            <input
+              onChange={({ target }) => setCompany(target.value)}
+              value={company}
+              placeholder='Company'
+              className='form-control mb-3'
+              type='text'
+            />
+            <textarea
+              onChange={({ target }) => setDescription(target.value)}
+              value={description}
+              placeholder='Description'
+              className='form-control mb-3'
+              type='text'
+            />
+            <h5>Exp List</h5>
+            {expList.length === 0 && 'no experience yet'}
+
+            <ul className='list-group mb-3'>
+              {expList &&
+                expList.map(({ year, title, id }, idx) => {
+                  return (
+                    <li
+                      key={id}
+                      className='list-group-item d-flex justify-content-between'
+                    >
+                      {year}, {title} - {idx + 1}
+                      <button
+                        onClick={() => {
+                          setSkillsList(experience.filter((s) => s.id !== id))
+                          updateExperience(
+                            experience.filter((s) => s.id !== id)
+                          )
+                        }}
+                        type='button'
+                        className='btn btn-sm btn-outline-danger'
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </li>
+                  )
+                })}
+            </ul>
+            <button className='btn btn-primary mb-3'>Save</button>
           </div>
         </form>
       </section>
