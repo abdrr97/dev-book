@@ -82,6 +82,7 @@ const PortfolioProvider = ({ children }) => {
         bio: info.bio,
         address: info.address,
         birthDate: info.birthDate,
+        skills: info.skills,
       })
       .then(() => {
         setMessage('user profile info was updated successfully')
@@ -90,6 +91,13 @@ const PortfolioProvider = ({ children }) => {
     setTimeout(() => {
       setMessage(null)
     }, 2500)
+  }
+
+  const removeSkill = (skills) => {
+    const _docRef = db.collection('users').doc(currentUser.email)
+    _docRef.update({
+      skills: skills,
+    })
   }
 
   useEffect(() => {
@@ -136,6 +144,7 @@ const PortfolioProvider = ({ children }) => {
     message,
     user,
     progress,
+    removeSkill,
   }
 
   return <PortfolioContext.Provider value={values} children={children} />

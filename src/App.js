@@ -27,17 +27,18 @@ export const App = () => {
 
     const docRef = db.collection('users').doc(currentUser.email)
 
-    vis.on('idle', function () {
+    vis.on('idle', () => {
       return docRef.update({
         online: 'BUSY',
       })
     })
 
-    vis.on('wakeup', function () {
+    vis.on('wakeup', () => {
       return docRef.update({
         online: 'ONLINE',
       })
     })
+    vis.setIdleDuration(240)
   }, [currentUser])
 
   return (
