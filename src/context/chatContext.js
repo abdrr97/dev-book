@@ -15,7 +15,7 @@ const ChatProvider = ({ children }) => {
 
   // function that starts a conversation with another user
   const startConversation = (message) => {
-    if (!currentUser) return
+    if (!currentUser && !user) return
     if (!selectedUser) return
 
     // here i basicity make a link between the sender and receiver of the message
@@ -28,10 +28,10 @@ const ChatProvider = ({ children }) => {
     const _message = {
       uid: currentUser.uid,
       email: currentUser.email,
-      roomName: chatRoomName,
-      message: message,
       username: user.username,
       photoURL: user.photoURL,
+      roomName: chatRoomName,
+      message: message,
       createdAt: timestamp(),
     }
 

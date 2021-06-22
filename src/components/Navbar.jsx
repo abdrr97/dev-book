@@ -10,12 +10,8 @@ import { ChatContext } from '../context/chatContext'
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
   const { user } = useContext(PortfolioContext)
-  const {
-    setNotifications,
-    notifications,
-    setSelectedUser,
-    changeNotificationStatus,
-  } = useContext(ChatContext)
+  const { setNotifications, notifications, setSelectedUser, changeNotificationStatus } =
+    useContext(ChatContext)
   const history = useHistory()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -30,6 +26,7 @@ const Navbar = () => {
           from: null,
         }),
         changeNotificationStatus(),
+        (document.title = 'DevBook | Portfolio'),
       ]).then(() => {
         history.push('/chat-room')
       })
@@ -43,11 +40,7 @@ const Navbar = () => {
       // check if permission is already granted
       if (Notification.permission === 'granted') {
         // show notification here
-        if (
-          notifications &&
-          notifications.from &&
-          notifications.to.includes(currentUser.email)
-        ) {
+        if (notifications && notifications.from && notifications.to.includes(currentUser.email)) {
           // doesn't work in mobile yet
           const options = {
             body: notifications.from.message,
@@ -58,25 +51,12 @@ const Navbar = () => {
             options
           )
 
-          document.title = `New message from ${notifications.from.username}`
-          setTimeout(() => {
-            document.title = 'DevBook | Portfolio'
-          }, 1500)
+          document.title = `${notifications.from.username} sent you a message`
 
-          notification.onclick = () => {
-            Promise.allSettled([
-              setSelectedUser({
-                ...notifications.from,
-              }),
-              setNotifications({
-                read: true,
-                from: null,
-              }),
-              changeNotificationStatus(),
-            ]).then(() => {
-              history.push('/chat-room')
-            })
-          }
+          const audio = new Audio('/assets/wewew.m4a')
+          audio.play()
+
+          notification.onclick = () => triggerNotification
         }
       } else {
         // request permission from user
@@ -119,7 +99,7 @@ const Navbar = () => {
                     <Link to='/profile'>Settings</Link>
                   </li>
 
-                  {user && (
+                  {user && user.username && (
                     <li className='menu-item'>
                       <Link to={`/p/${user.username}`}>{user.username}</Link>
                     </li>

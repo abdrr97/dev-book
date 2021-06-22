@@ -25,16 +25,21 @@ const SignUp = () => {
     try {
       signup(email, password)
         .then(({ user }) => {
-          db.collection('users').doc(email).set({
-            username: '',
-            bio: '',
-            address: '',
-            birthDate: '',
-            photoURL: DEFAULT_PROFILE_AVATAR,
-            uid: user.uid,
-            email: email,
-            lastLoggedIn: timestamp(),
-          })
+          db.collection('users')
+            .doc(email)
+            .set({
+              username: '',
+              bio: '',
+              address: '',
+              birthDate: '',
+              photoURL: DEFAULT_PROFILE_AVATAR,
+              uid: user.uid,
+              email: email,
+              lastLoggedIn: timestamp(),
+            })
+            .then(() => {
+              window.location = '/profile'
+            })
         })
         .catch((err) => {
           setError(err.message)
@@ -42,7 +47,6 @@ const SignUp = () => {
         .finally(() => {
           // after the sign up user will be directed to his profile
           setIsLoading(false)
-          window.location = '/profile'
         })
     } catch (ex) {
       setError(ex.message)
@@ -61,11 +65,7 @@ const SignUp = () => {
           <div className='row align-items-center'>
             <div className='col-lg-7 col-md-6'>
               <div className='me-lg-5'>
-                <img
-                  src='images/user/signup.svg'
-                  className='img-fluid d-block mx-auto'
-                  alt=''
-                />
+                <img src='images/user/signup.svg' className='img-fluid d-block mx-auto' alt='' />
               </div>
             </div>
             <div className='col-lg-5 col-md-6'>
@@ -107,9 +107,7 @@ const SignUp = () => {
                             <FiKey className='fea icon-sm icons' />
                             <input
                               value={password}
-                              onChange={(event) =>
-                                setPassword(event.target.value)
-                              }
+                              onChange={(event) => setPassword(event.target.value)}
                               required
                               id='password'
                               name='password'
@@ -131,9 +129,7 @@ const SignUp = () => {
                             <FiKey className='fea icon-sm icons' />
                             <input
                               value={confirmPassword}
-                              onChange={(event) =>
-                                setConfirmPassword(event.target.value)
-                              }
+                              onChange={(event) => setConfirmPassword(event.target.value)}
                               id='password-confirmation'
                               name='password-confirmation'
                               type='password'
@@ -169,11 +165,7 @@ const SignUp = () => {
 
                       <div className='col-md-12'>
                         <div className='d-grid'>
-                          <button
-                            type='submit'
-                            disabled={isLoading}
-                            className='btn btn-primary'
-                          >
+                          <button type='submit' disabled={isLoading} className='btn btn-primary'>
                             {isLoading ? (
                               <div className='d-flex justify-content-center'>
                                 <div className='spinner-border'></div>
@@ -187,9 +179,7 @@ const SignUp = () => {
 
                       <div className='mx-auto'>
                         <p className='mb-0 mt-3'>
-                          <small className='text-dark me-2'>
-                            Already have an account ?
-                          </small>
+                          <small className='text-dark me-2'>Already have an account ?</small>
                           <Link to='log-in' className='text-dark fw-bold'>
                             Log in
                           </Link>
