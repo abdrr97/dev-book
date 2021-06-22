@@ -92,8 +92,8 @@ const Profile = () => {
         // experience
         experience: user.experience || [],
       })
-      setSkillsList(user.skills)
-      setExpList(user.experience)
+      setSkillsList(user.skills  || [])
+      setExpList(user.experience  || [])
     }
   }, [user])
 
@@ -270,7 +270,7 @@ const Profile = () => {
               type='text'
             />
             <h5>Exp List</h5>
-            {expList.length === 0 && 'no experience yet'}
+            { expList.length === 0 && 'no experience yet'}
 
             <ul className='list-group mb-3'>
               {expList &&
