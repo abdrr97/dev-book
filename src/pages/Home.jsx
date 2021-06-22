@@ -21,7 +21,7 @@ const Home = () => {
 
         <section className='row'>
           {users.map((_user, idx) => {
-            const { bio, username, online, photoURL, skills } = _user
+            const {  username, online, photoURL, skills } = _user
             return (
               <article key={idx} className='col-lg-4 col-md-6 col-12 mt-4 pt-2'>
                 <div className='candidate-list card rounded border-0 shadow'>

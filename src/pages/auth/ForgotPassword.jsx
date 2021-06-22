@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('abdrr97@gmail.com')
+  const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
