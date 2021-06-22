@@ -106,6 +106,55 @@ const PortfolioProvider = ({ children }) => {
     })
   }
 
+  // adding projects to firestore / storage
+  const addProject = (_projectObj, _projects) => {
+    const _docRef = db.collection('users').doc(currentUser.email)
+
+    // upload/update image url only
+    const { projectImage } = _projectObj
+    const types = ['image/png', 'image/jpeg']
+
+    if (projectImage && types.includes(projectImage.type)) {
+      const stgRef = storage.ref(projectImage.name + currentUser.uid)
+      stgRef.put(projectImage).on(
+        'state_changed',
+        (snap) => {
+          // uploading
+          const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+          setProgress(_percentage)
+        },
+        (err) => {},
+        () => {
+          // on finish upload
+          stgRef.getDownloadURL().then((url) => {
+            _docRef
+              .update({
+                projects: [
+                  ..._projects,
+                  {
+                    ..._projectObj,
+                    projectImage: url, // from file to string
+                  },
+                ],
+              })
+              .finally(() => {
+                setMessage('user profile image was updated successfully')
+                setProgress(0)
+              })
+          })
+        }
+      )
+    }
+  }
+
+  // remove project from firestore
+  const removeProject = (_projects) => {
+    const _docRef = db.collection('users').doc(currentUser.email)
+    _docRef.update({
+      projects: _projects,
+    })
+  }
+
   useEffect(() => {
     // getting users only if they have a username
     const unsubscribe = db.collection('users').onSnapshot((snapshot) => {
@@ -152,6 +201,8 @@ const PortfolioProvider = ({ children }) => {
     progress,
     updateSkill,
     updateExperience,
+    addProject,
+    removeProject,
   }
 
   return <PortfolioContext.Provider value={values} children={children} />

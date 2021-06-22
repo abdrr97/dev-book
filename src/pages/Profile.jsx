@@ -13,6 +13,8 @@ const Profile = () => {
     user,
     updateSkill,
     updateExperience,
+    addProject,
+    removeProject,
   } = useContext(PortfolioContext)
 
   const [userInfo, setUserInfo] = useState({
@@ -24,7 +26,8 @@ const Profile = () => {
     skills: [],
   })
 
-  const { username, bio, address, birthDate, skills, experience } = userInfo
+  const { username, bio, address, birthDate, skills, experience, projects } =
+    userInfo
   // Skills
   const [language, setLanguage] = useState('')
   const [percentage, setPercentage] = useState(0)
@@ -36,6 +39,13 @@ const Profile = () => {
   const [company, setCompany] = useState('')
   const [description, setDescription] = useState('')
   const [expList, setExpList] = useState([])
+
+  // projects
+  const [projectTitle, setProjectTitle] = useState('')
+  const [projectUrl, setProjectUrl] = useState('')
+  const [projectImage, setProjectImage] = useState(null) // Type File
+  const [projectDescription, setProjectDescription] = useState('')
+  const [projectsList, setProjectsList] = useState([])
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -80,6 +90,20 @@ const Profile = () => {
     setDescription('')
   }
 
+  const submitProjectHandler = (e) => {
+    e.preventDefault()
+
+    // add project
+    const _projectObj = {
+      id: Date.now(),
+      projectTitle,
+      projectUrl,
+      projectDescription,
+      projectImage, // type file
+    }
+    addProject(_projectObj, projects)
+  }
+
   useEffect(() => {
     if (user) {
       setUserInfo({
@@ -91,9 +115,12 @@ const Profile = () => {
         skills: user.skills || [],
         // experience
         experience: user.experience || [],
+        // projects
+        projects: user.projects || [],
       })
-      setSkillsList(user.skills  || [])
-      setExpList(user.experience  || [])
+      setSkillsList(user.skills || [])
+      setExpList(user.experience || [])
+      setProjectsList(user.projects || [])
     }
   }, [user])
 
@@ -128,7 +155,7 @@ const Profile = () => {
           </div>
         )}
 
-        <form className='card mb-3' onSubmit={(e) => submitHandler(e)}>
+        <form onSubmit={(e) => submitHandler(e)} className='card mb-3'>
           <div className='card-body'>
             <h3>User Info</h3>
             <input
@@ -237,7 +264,10 @@ const Profile = () => {
           </div>
         </form>
 
-        <form onSubmit={(e) => submitExperienceHandler(e)} className='card'>
+        <form
+          onSubmit={(e) => submitExperienceHandler(e)}
+          className='card mb-3'
+        >
           <div className='card-body'>
             <h3>Experience</h3>
 
@@ -270,7 +300,7 @@ const Profile = () => {
               type='text'
             />
             <h5>Exp List</h5>
-            { expList.length === 0 && 'no experience yet'}
+            {expList.length === 0 && 'no experience yet'}
 
             <ul className='list-group mb-3'>
               {expList &&
@@ -283,7 +313,7 @@ const Profile = () => {
                       {year}, {title} - {idx + 1}
                       <button
                         onClick={() => {
-                          setSkillsList(experience.filter((s) => s.id !== id))
+                          setExpList(experience.filter((s) => s.id !== id))
                           updateExperience(
                             experience.filter((s) => s.id !== id)
                           )
@@ -296,6 +326,71 @@ const Profile = () => {
                     </li>
                   )
                 })}
+            </ul>
+            <button className='btn btn-primary mb-3'>Save</button>
+          </div>
+        </form>
+
+        <form onSubmit={(e) => submitProjectHandler(e)} className='card'>
+          <div className='card-body'>
+            <h3>Projects</h3>
+
+            <input
+              value={projectTitle}
+              onChange={({ target }) => setProjectTitle(target.value)}
+              placeholder='Title'
+              className='form-control mb-3'
+              type='text'
+            />
+            <input
+              value={projectUrl}
+              onChange={({ target }) => setProjectUrl(target.value)}
+              placeholder='Url'
+              className='form-control mb-3'
+              type='text'
+            />
+            <input
+              onChange={({ target }) => setProjectImage(target.files[0])}
+              placeholder='Image'
+              className='form-control mb-3'
+              type='file'
+            />
+            <textarea
+              value={projectDescription}
+              onChange={({ target }) => setProjectDescription(target.value)}
+              placeholder='Description'
+              className='form-control mb-3'
+            />
+
+            <h5>Project List</h5>
+
+            {projectsList.length === 0 && 'no projects yet'}
+
+            <ul className='list-group mb-3'>
+              {projectsList.map((_project) => {
+                return (
+                  <li
+                    key={_project.id}
+                    className='list-group-item d-flex justify-content-between'
+                  >
+                    {_project.projectTitle}
+                    <button
+                      onClick={() => {
+                        setProjectsList(
+                          projectsList.filter((s) => s.id !== _project.id)
+                        )
+                        removeProject(
+                          projectsList.filter((s) => s.id !== _project.id)
+                        )
+                      }}
+                      type='button'
+                      className='btn btn-sm btn-outline-danger'
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
             <button className='btn btn-primary mb-3'>Save</button>
           </div>
