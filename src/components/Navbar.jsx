@@ -18,6 +18,23 @@ const Navbar = () => {
   } = useContext(ChatContext)
   const history = useHistory()
 
+  const triggerNotification = () => {
+    if (notifications.from) {
+      Promise.allSettled([
+        setSelectedUser({
+          ...notifications.from,
+        }),
+        setNotifications({
+          read: true,
+          from: null,
+        }),
+        changeNotificationStatus(),
+      ]).then(() => {
+        history.push('/chat-room')
+      })
+    }
+  }
+
   useEffect(() => {
     if (!window.Notification) {
       console.log('Browser does not support notifications.')
@@ -39,6 +56,12 @@ const Navbar = () => {
             `New message from ${notifications.from.username}`,
             options
           )
+
+          document.title = `New message from ${notifications.from.username}`
+          setTimeout(() => {
+            document.title = 'DevBook | Portfolio'
+          }, 1500)
+
           notification.onclick = () => {
             Promise.allSettled([
               setSelectedUser({
@@ -72,84 +95,70 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className='navbar navbar-expand navbar-light bg-light'>
-        <div className='container-fluid'>
-          <Link className='navbar-brand' to='/'>
-            Dev Book
+      <header id='topnav' className='defaultscroll sticky bg-white'>
+        <div className='container'>
+          <Link to='/' className='logo'>
+            <h4 className='logo-light-mode'>DevBook</h4>
           </Link>
-
-          <div className=' navbar-'>
-            <ul className='navbar-nav'>
-              <li className='nav-item'>
-                <Link className='nav-link' to='/posts'>
+          <div style={{ display: 'block', position: 'unset' }} id='navigation'>
+            <ul className='navigation-menu'>
+              <li>
+                <Link to='/posts' className='sub-menu-item'>
                   Forum
                 </Link>
               </li>
+
               {currentUser ? (
                 <>
-                  <li className='nav-item'>
+                  <li className='menu-item'>
+                    <Link to='/chat-room'>chat room</Link>
+                  </li>
+
+                  <li className='menu-item'>
+                    <Link to='/profile'>Settings</Link>
+                  </li>
+
+                  {user && (
+                    <li className='menu-item'>
+                      <Link to={`/p/${user.username}`}>{user.username}</Link>
+                    </li>
+                  )}
+
+                  <li className='menu-item buy-button'>
                     <button
-                      onClick={() => {
-                        Promise.allSettled([
-                          setSelectedUser({
-                            ...notifications.from,
-                          }),
-                          setNotifications({
-                            read: true,
-                            from: null,
-                          }),
-                          changeNotificationStatus(),
-                        ]).then(() => {
-                          history.push('/chat-room')
-                        })
-                      }}
-                      className='btn-notification mx-2 btn nav-link'
+                      onClick={triggerNotification}
+                      className='btn text-primary btn-notification'
                     >
                       <BsBellFill />
                       {notifications && notifications.from && (
                         <span className='notification'></span>
                       )}
                     </button>
-                    {notifications && notifications.from && (
-                      <div>{notifications.from.username}</div>
-                    )}
                   </li>
-                  {user && (
-                    <li className='nav-item'>
-                      <Link className='nav-link' to={`/p/${user.username}`}>
-                        {user.username}
-                      </Link>
-                    </li>
-                  )}
-                  <li className='nav-item'>
-                    <Link className='active nav-link' to='/profile'>
-                      Settings
-                    </Link>
-                  </li>
-                  <li className='nav-item'>
-                    <button onClick={logout} className='btn nav-link'>
-                      Logout
+
+                  <li className='menu-item buy-button'>
+                    <button
+                      onClick={logout}
+                      className='btn btn-sm btn-soft-primary'
+                    >
+                      LOGOUT
                     </button>
                   </li>
                 </>
               ) : (
                 <>
-                  <li className='nav-item'>
-                    <Link className='nav-link' to='/sign-up'>
-                      SignUp
-                    </Link>
+                  <li className='menu-item'>
+                    <Link to='/sign-up'>sign up</Link>
                   </li>
-                  <li className='nav-item'>
-                    <Link className='nav-link' to='/log-in'>
-                      Login
-                    </Link>
+                  <li className='menu-item '>
+                    <Link to='/log-in'>log in</Link>
                   </li>
                 </>
               )}
             </ul>
           </div>
         </div>
-      </nav>
+      </header>
     </>
   )
 }
