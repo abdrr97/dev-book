@@ -8,7 +8,6 @@ const AuthProvider = ({ children }) => {
   // this is the auth scaffolding check
   // discord to find the youtube video
   // that explain this part step by step (good luck 😊)
-
   const [currentUser, setCurrentUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 

@@ -6,7 +6,6 @@ import { AuthContext } from '../context/authContext'
 import moment from 'moment'
 
 // as i sed in the chat context this bit difficult logic to comprehend
-
 const ChatRoom = () => {
   const { currentUser } = useContext(AuthContext)
   const { users } = useContext(PortfolioContext)

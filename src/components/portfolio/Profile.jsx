@@ -1,6 +1,5 @@
 import moment from 'moment'
 import React from 'react'
-import Skills from './Skills'
 
 const Profile = ({ userInfo }) => {
   const { bio, username, email, birthDate } = userInfo

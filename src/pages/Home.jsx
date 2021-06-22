@@ -1,16 +1,10 @@
 import React, { useContext } from 'react'
 import { PortfolioContext } from '../context/context'
-import { Link, useHistory } from 'react-router-dom'
+import { Link  } from 'react-router-dom'
 import { RiRadioButtonLine } from 'react-icons/ri'
-import { ChatContext } from '../context/chatContext'
-import { AuthContext } from '../context/authContext'
-import { BsHeartFill } from 'react-icons/bs'
 
 const Home = () => {
   const { users } = useContext(PortfolioContext)
-  const { currentUser } = useContext(AuthContext)
-  const { setSelectedUser } = useContext(ChatContext)
-  const history = useHistory()
 
   return (
     <>

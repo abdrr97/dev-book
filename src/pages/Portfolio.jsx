@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PortfolioContext } from '../context/context'
 import Hero from '../components/portfolio/Hero'
-import Profile from '../components/portfolio/Profile'
 import PageLoading from '../components/PageLoading'
 
 const Portfolio = () => {
