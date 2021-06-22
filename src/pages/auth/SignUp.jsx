@@ -3,6 +3,8 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
 import { db, timestamp } from '../../firebase'
+import { FiHome, FiMail, FiKey } from 'react-icons/fi'
+import { DEFAULT_PROFILE_AVATAR } from '../../constants'
 
 const SignUp = () => {
   const [email, setEmail] = useState('')
@@ -23,29 +25,24 @@ const SignUp = () => {
     try {
       signup(email, password)
         .then(({ user }) => {
-          db.collection('users')
-            .doc(email)
-            .set({
-              username: '',
-              bio: '',
-              address: '',
-              birthDate: '',
-              photoURL:
-                'https://firebasestorage.googleapis.com/v0/b/react-dev-book.appspot.com/o/default%2Fdefault.jpg?alt=media&token=beb80150-a8da-46f0-908f-8cbfb7ad2f4c',
-              uid: user.uid,
-              email: email,
-              lastLoggedIn: timestamp(),
-            })
-            .then(() => {
-              // after the sign up user will be directed to his profile
-              window.location = '/profile'
-            })
+          db.collection('users').doc(email).set({
+            username: '',
+            bio: '',
+            address: '',
+            birthDate: '',
+            photoURL: DEFAULT_PROFILE_AVATAR,
+            uid: user.uid,
+            email: email,
+            lastLoggedIn: timestamp(),
+          })
         })
         .catch((err) => {
           setError(err.message)
         })
         .finally(() => {
+          // after the sign up user will be directed to his profile
           setIsLoading(false)
+          window.location = '/profile'
         })
     } catch (ex) {
       setError(ex.message)
@@ -53,80 +50,159 @@ const SignUp = () => {
   }
   return (
     <>
-      <div
-        style={{ height: '100vh' }}
-        className='d-flex justify-content-center align-items-center'
-      >
-        <div className='w-100' style={{ maxWidth: '400px' }}>
-          <div className='card'>
-            <div className='card-body'>
-              <h2 className='text-center mb-4'>Sign Up</h2>
+      <div className='back-to-home rounded d-none d-sm-block'>
+        <Link to='/' className='btn btn-icon btn-soft-primary'>
+          <FiHome />
+        </Link>
+      </div>
 
-              <form onSubmit={handleSignUp}>
-                {error && <div className='alert alert-danger'>{error}</div>}
+      <section className='bg-auth-home d-table w-100'>
+        <div className='container'>
+          <div className='row align-items-center'>
+            <div className='col-lg-7 col-md-6'>
+              <div className='me-lg-5'>
+                <img
+                  src='images/user/signup.svg'
+                  className='img-fluid d-block mx-auto'
+                  alt=''
+                />
+              </div>
+            </div>
+            <div className='col-lg-5 col-md-6'>
+              <div className='card shadow rounded border-0'>
+                <div className='card-body'>
+                  <h4 className='card-title text-center'>Sign up</h4>
+                  <form className='login-form mt-4' onSubmit={handleSignUp}>
+                    {error && <div className='alert alert-danger'>{error}</div>}
 
-                <div className='mb-3'>
-                  <label htmlFor='email'>Email</label>
-                  <input
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                    id='email'
-                    name='email'
-                    type='email'
-                    placeholder='Enter your email here'
-                    className='form-control'
-                  />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='password'>Password</label>
-                  <input
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                    id='password'
-                    name='password'
-                    type='password'
-                    placeholder='Enter your password here'
-                    className='form-control'
-                  />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='password-confirmation'>
-                    Password Confirmation
-                  </label>
-                  <input
-                    value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                    required
-                    id='password-confirmation'
-                    name='password-confirmation'
-                    type='password'
-                    placeholder='ReWrite your password'
-                    className='form-control'
-                  />
-                </div>
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Your Email <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiMail className='fea icon-sm icons' />
 
-                <button
-                  disabled={isLoading}
-                  type='submit'
-                  className='w-100 btn btn-primary mt-5'
-                >
-                  {!isLoading && 'Sign Up'}
-                  {isLoading && (
-                    <div className='d-flex justify-content-center'>
-                      <div className='spinner-border'></div>
+                            <input
+                              value={email}
+                              onChange={(event) => setEmail(event.target.value)}
+                              required
+                              id='email'
+                              name='email'
+                              type='email'
+                              placeholder='Enter your email here'
+                              className='form-control ps-5'
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='col-md-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Password <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiKey className='fea icon-sm icons' />
+                            <input
+                              value={password}
+                              onChange={(event) =>
+                                setPassword(event.target.value)
+                              }
+                              required
+                              id='password'
+                              name='password'
+                              type='password'
+                              className='form-control ps-5'
+                              placeholder='Enter your password here'
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='col-md-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Confirm Password
+                            <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiKey className='fea icon-sm icons' />
+                            <input
+                              value={confirmPassword}
+                              onChange={(event) =>
+                                setConfirmPassword(event.target.value)
+                              }
+                              id='password-confirmation'
+                              name='password-confirmation'
+                              type='password'
+                              className='form-control ps-5'
+                              placeholder='Confirm Password'
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* <div className='col-md-12'>
+                        <div className='mb-3'>
+                          <div className='form-check'>
+                            <input
+                              className='form-check-input'
+                              type='checkbox'
+                              value=''
+                              id='flexCheckDefault'
+                            />
+                            <label
+                              className='form-check-label'
+                              for='flexCheckDefault'
+                            >
+                              I Accept
+                              <a href='#' className='text-primary'>
+                                Terms And Condition
+                              </a>
+                            </label>
+                          </div>
+                        </div>
+                      </div> */}
+
+                      <div className='col-md-12'>
+                        <div className='d-grid'>
+                          <button
+                            type='submit'
+                            disabled={isLoading}
+                            className='btn btn-primary'
+                          >
+                            {isLoading ? (
+                              <div className='d-flex justify-content-center'>
+                                <div className='spinner-border'></div>
+                              </div>
+                            ) : (
+                              'Register'
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className='mx-auto'>
+                        <p className='mb-0 mt-3'>
+                          <small className='text-dark me-2'>
+                            Already have an account ?
+                          </small>
+                          <Link to='log-in' className='text-dark fw-bold'>
+                            Log in
+                          </Link>
+                        </p>
+                      </div>
                     </div>
-                  )}
-                </button>
-              </form>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-          <div className='w-100 text-center mt-2'>
-            Already Have an Account? <Link to='/log-in'>Log in</Link>
-          </div>
         </div>
-      </div>
+      </section>
     </>
   )
 }

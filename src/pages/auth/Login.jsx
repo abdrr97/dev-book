@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
+import { FiHome, FiMail, FiKey } from 'react-icons/fi'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -13,14 +14,17 @@ const Login = () => {
   const handleSignUp = (e) => {
     e.preventDefault()
     setIsLoading(true)
+    setError('')
+
     try {
-      setError('')
       login(email, password)
+        .then(() => {
+          history.push('/')
+        })
         .catch((err) => {
           setError(err.message)
         })
         .finally(() => {
-          history.push('/')
           setIsLoading(false)
         })
     } catch (ex) {
@@ -30,68 +34,123 @@ const Login = () => {
 
   return (
     <>
-      <div
-        style={{ height: '100vh' }}
-        className='d-flex justify-content-center align-items-center'
-      >
-        <div className='w-100' style={{ maxWidth: '400px' }}>
-          <div className='card'>
-            <div className='card-body'>
-              <h2 className='text-center mb-4'>Login</h2>
-              <form onSubmit={handleSignUp}>
-                {error && <div className='alert alert-danger'>{error}</div>}
+      <div className='back-to-home rounded d-none d-sm-block'>
+        <Link to='/' className='btn btn-icon btn-soft-primary'>
+          <FiHome />
+        </Link>
+      </div>
+      <section className='bg-home d-flex align-items-center'>
+        <div className='container'>
+          <div className='row align-items-center'>
+            <div className='col-lg-7 col-md-6'>
+              <div className='me-lg-5'>
+                <img
+                  src='images/user/login.svg'
+                  className='img-fluid d-block mx-auto'
+                  alt=''
+                />
+              </div>
+            </div>
+            <div className='col-lg-5 col-md-6'>
+              <div className='card login-page bg-white shadow rounded border-0'>
+                <div className='card-body'>
+                  <h4 className='card-title text-center'>Login</h4>
 
-                <div className='mb-3'>
-                  <label htmlFor='email'>Email</label>
-                  <input
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                    id='email'
-                    type='email'
-                    placeholder='Enter your email here'
-                    className='form-control'
-                  />
-                </div>
-                <div className='mb-3'>
-                  <label htmlFor='password'>Password</label>
-                  <input
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                    id='password'
-                    name='password'
-                    type='password'
-                    placeholder='Enter your password here'
-                    className='form-control'
-                  />
-                </div>
+                  <form onSubmit={handleSignUp} className='login-form mt-4'>
+                    {error && <div className='alert alert-danger'>{error}</div>}
+                    <div className='row'>
+                      <div className='col-lg-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Your Email <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiMail className='fea icon-sm icons' />
 
-                <div className='btn-group'>
-                  <button
-                    disabled={isLoading}
-                    type='submit'
-                    className='w-100 btn btn-primary mt-3'
-                  >
-                    {!isLoading && 'Login'}
-                    {isLoading && (
-                      <div className='d-flex justify-content-center'>
-                        <div className='spinner-border'></div>
+                            <input
+                              value={email}
+                              onChange={(event) => setEmail(event.target.value)}
+                              required
+                              id='email'
+                              type='email'
+                              placeholder='Enter your email here'
+                              className='form-control ps-5'
+                              name='email'
+                            />
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </button>
+
+                      <div className='col-lg-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Password <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiKey className='fea icon-sm icons' />
+
+                            <input
+                              value={password}
+                              onChange={(event) =>
+                                setPassword(event.target.value)
+                              }
+                              required
+                              id='password'
+                              name='password'
+                              type='password'
+                              placeholder='Enter your password here'
+                              className='form-control ps-5'
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='col-lg-12'>
+                        <div className='d-flex justify-content-between'>
+                          <p className='forgot-pass mb-3'>
+                            <Link to='/' className='text-dark fw-bold'>
+                              Forgot password ?
+                            </Link>
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className='col-lg-12 mb-0'>
+                        <div className='d-grid'>
+                          <button
+                            disabled={isLoading}
+                            type='submit'
+                            className='btn btn-primary'
+                          >
+                            {isLoading ? (
+                              <div className='d-flex justify-content-center'>
+                                <div className='spinner-border'></div>
+                              </div>
+                            ) : (
+                              'Log in'
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className='col-12 text-center'>
+                        <p className='mb-0 mt-3'>
+                          <small className='text-dark me-2'>
+                            Don't have an account ?
+                          </small>
+                          <Link to='/sign-up' className='text-dark fw-bold'>
+                            Sign Up
+                          </Link>
+                        </p>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-          <div className='w-100 text-center mt-2'>
-            You don't have an account? <Link to='/sign-up'>Sign up</Link>
-          </div>
-          <div className='w-100 text-center mt-2'>
-            <Link to='/forgot-password'>Forgot Password</Link>
-          </div>
         </div>
-      </div>
+      </section>
     </>
   )
 }
