@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthContext } from '../context/authContext'
 import { PortfolioContext } from '../context/context'
@@ -17,6 +17,7 @@ const Navbar = () => {
     changeNotificationStatus,
   } = useContext(ChatContext)
   const history = useHistory()
+  const [isLoading, setIsLoading] = useState(false)
 
   const triggerNotification = () => {
     if (notifications.from) {
@@ -138,10 +139,21 @@ const Navbar = () => {
 
                   <li className='menu-item buy-button'>
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        setIsLoading(true)
+                        logout().finally(() => {
+                          setIsLoading(false)
+                        })
+                      }}
                       className='btn btn-sm btn-soft-primary'
                     >
-                      LOGOUT
+                      {isLoading ? (
+                        <div className='d-flex justify-content-center'>
+                          <div className='spinner-border'></div>
+                        </div>
+                      ) : (
+                        'LOGOUT'
+                      )}
                     </button>
                   </li>
                 </>
