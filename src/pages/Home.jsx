@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { PortfolioContext } from '../context/context'
-import { Link  } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { RiRadioButtonLine } from 'react-icons/ri'
 
 const Home = () => {
@@ -21,22 +21,22 @@ const Home = () => {
 
         <section className='row'>
           {users.map((_user, idx) => {
-            const {  username, online, photoURL, skills } = _user
+            const { username, online, photoURL, skills } = _user
+
+            const isOnline =
+              online === 'ONLINE'
+                ? 'bg-soft-success'
+                : online === 'OFFLINE'
+                ? 'bg-soft-danger'
+                : 'bg-soft-warning'
+
             return (
               <article key={idx} className='col-lg-4 col-md-6 col-12 mt-4 pt-2'>
                 <div className='candidate-list card rounded border-0 shadow'>
                   <div className='card-body'>
                     <ul className='list-unstyled align-items-center'>
                       <li className='list-inline-item'>
-                        <span
-                          className={
-                            online === 'ONLINE'
-                              ? 'badge rounded-pill bg-soft-success'
-                              : online === 'OFFLINE'
-                              ? 'badge rounded-pill bg-soft-danger'
-                              : 'badge rounded-pill bg-soft-warning'
-                          }
-                        >
+                        <span className={`${isOnline} badge rounded-pill`}>
                           <RiRadioButtonLine />
                         </span>
                       </li>
@@ -65,20 +65,17 @@ const Home = () => {
                           })}
                       </ul>
 
-                      <p className='text-muted my-1'>Front-end Developer</p>
+                      {/* <p className='text-muted my-1'>Front-end Developer</p> */}
 
-                      <span className='text-muted'>
+                      {/* <span className='text-muted'>
                         <i className='uil uil-graduation-cap h4 mb-0 me-2 text-primary'></i>
                         Experience
                         <span className='text-success'>3+ years</span>
-                      </span>
+                      </span> */}
 
                       <ul className='list-unstyled mt-3'></ul>
                       <div className='d-grid'>
-                        <Link
-                          to={`/p/${username}`}
-                          className='btn btn-soft-primary'
-                        >
+                        <Link to={`/p/${username}`} className='btn btn-soft-primary'>
                           Read More
                           <i className='uil uil-angle-right-b align-middle'></i>
                         </Link>
