@@ -19,6 +19,9 @@ import ChatRoom from './pages/ChatRoom'
 import { AuthContext } from './context/authContext'
 import { db } from './firebase'
 import vis from 'ifvisible.js'
+import PostList from './pages/forum/PostList'
+import CreatePost from './pages/forum/CreatePost'
+import SinglePost from './pages/forum/SinglePost'
 
 export const App = () => {
   const { currentUser } = useContext(AuthContext)
@@ -53,6 +56,10 @@ export const App = () => {
           <PrivateRoute path='/profile' component={Profile} />
           <PrivateRoute path='/chat-room' component={ChatRoom} />
           <Route path='/p/:username' component={Portfolio} />
+
+          <Route exact path='/posts' component={PostList} />
+          <PrivateRoute path='/posts/create' component={CreatePost} />
+          <Route path='/post/:postId' component={SinglePost} />
 
           <Route path='*' component={NotFound} />
         </Switch>

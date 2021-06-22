@@ -80,6 +80,11 @@ const Navbar = () => {
 
           <div className=' navbar-'>
             <ul className='navbar-nav'>
+              <li className='nav-item'>
+                <Link className='nav-link' to='/posts'>
+                  Forum
+                </Link>
+              </li>
               {currentUser ? (
                 <>
                   <li className='nav-item'>

@@ -10,6 +10,7 @@ const Hero = ({ userInfo }) => {
     photoURL,
     username,
     experience,
+    projects,
   } = userInfo
 
   // TODO: online here
@@ -212,7 +213,6 @@ const Hero = ({ userInfo }) => {
               <div className='ms-lg-4'>
                 <h4>About Me:</h4>
                 <p className='text-muted mb-0'>{bio}</p>
-
                 <h4 className='mt-lg-5 mt-4'>Experience :</h4>
                 <div className='row'>
                   {experience &&
@@ -239,116 +239,57 @@ const Hero = ({ userInfo }) => {
                 </div>
 
                 <h4 className='mt-lg-5 mt-4'>Projects :</h4>
-                <div className='row'>
-                  <div className='col-md-6 col-12 mt-4 pt-2'>
-                    <div className='card border-0 work-container work-classic'>
-                      <div className='card-body p-0'>
-                        <a href='portfolio-detail-one.html'>
-                          <img
-                            src='images/work/1.jpg'
-                            className='img-fluid rounded work-image'
-                            alt=''
-                          />
-                        </a>
-                        <div className='content pt-3'>
-                          <h5 className='mb-0'>
-                            <a
-                              href='portfolio-detail-one.html'
-                              className='text-dark title'
-                            >
-                              Iphone mockup
-                            </a>
-                          </h5>
-                          <h6 className='text-muted tag mb-0'>Branding</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='col-md-6 col-12 mt-4 pt-2'>
-                    <div className='card border-0 work-container work-classic'>
-                      <div className='card-body p-0'>
-                        <a href='portfolio-detail-one.html'>
-                          <img
-                            src='images/work/2.jpg'
-                            className='img-fluid rounded work-image'
-                            alt=''
-                          />
-                        </a>
-                        <div className='content pt-3'>
-                          <h5 className='mb-0'>
-                            <a
-                              href='portfolio-detail-one.html'
-                              className='text-dark title'
-                            >
-                              Mockup Collection
-                            </a>
-                          </h5>
-                          <h6 className='text-muted tag mb-0'>Mockup</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='col-md-6 col-12 mt-4 pt-2'>
-                    <div className='card border-0 work-container work-classic'>
-                      <div className='card-body p-0'>
-                        <a href='portfolio-detail-one.html'>
-                          <img
-                            src='images/work/3.jpg'
-                            className='img-fluid rounded work-image'
-                            alt=''
-                          />
-                        </a>
-                        <div className='content pt-3'>
-                          <h5 className='mb-0'>
-                            <a
-                              href='portfolio-detail-one.html'
-                              className='text-dark title'
-                            >
-                              Abstract images
-                            </a>
-                          </h5>
-                          <h6 className='text-muted tag mb-0'>Abstract</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='col-md-6 col-12 mt-4 pt-2'>
-                    <div className='card border-0 work-container work-classic'>
-                      <div className='card-body p-0'>
-                        <a href='portfolio-detail-one.html'>
-                          <img
-                            src='images/work/4.jpg'
-                            className='img-fluid rounded work-image'
-                            alt=''
-                          />
-                        </a>
-                        <div className='content pt-3'>
-                          <h5 className='mb-0'>
-                            <a
-                              href='portfolio-detail-one.html'
-                              className='text-dark title'
-                            >
-                              Yellow bg with Books
-                            </a>
-                          </h5>
-                          <h6 className='text-muted tag mb-0'>Books</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <section className='row'>
+                  {projects &&
+                    projects.map((_project) => {
+                      const {
+                        id,
+                        projectTitle,
+                        projectUrl,
+                        projectDescription,
+                        projectImage,
+                      } = _project
+                      return (
+                        <article key={id} className='col-md-6 col-12 mt-4 pt-2'>
+                          <div className='card border-0 work-container work-classic'>
+                            <div className='card-body p-0'>
+                              <a
+                                target='_blank'
+                                href={projectUrl}
+                                rel='noreferrer'
+                              >
+                                <img
+                                  src={projectImage}
+                                  alt={projectTitle}
+                                  className='img-fluid rounded work-image'
+                                />
+                              </a>
+                              <div className='content pt-3'>
+                                <h5 className='mb-0'>
+                                  <a
+                                    href='portfolio-detail-one.html'
+                                    className='text-dark title'
+                                  >
+                                    {projectTitle}
+                                  </a>
+                                </h5>
+                                <p className='text-muted tag mb-0'>
+                                  {projectDescription}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </article>
+                      )
+                    })}
+                </section>
 
                 <div className='mt-4 pt-2'>
                   <button className='btn btn-primary me-2'>
                     <i className='uil uil-user-check'></i>
                     Hire me
                   </button>
-                  <button
-                    className='btn btn-outline-primary'
-                  >
+                  <button className='btn btn-outline-primary'>
                     <i className='uil uil-print'></i>
                     Print CV
                   </button>

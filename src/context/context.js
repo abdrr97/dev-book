@@ -147,7 +147,7 @@ const PortfolioProvider = ({ children }) => {
     }
   }
 
-  // remove project from firestore
+  // remove project from fire store
   const removeProject = (_projects) => {
     const _docRef = db.collection('users').doc(currentUser.email)
     _docRef.update({
