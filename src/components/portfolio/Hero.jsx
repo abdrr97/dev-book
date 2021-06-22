@@ -53,7 +53,7 @@ const Hero = ({ userInfo }) => {
                     <li>
                       <ul className='list-unstyled social-icon mb-0 mt-4'>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -71,7 +71,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -103,7 +103,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -121,7 +121,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -141,7 +141,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -159,7 +159,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
@@ -178,7 +178,7 @@ const Hero = ({ userInfo }) => {
                           </button>
                         </li>
                         <li className='list-inline-item'>
-                          <button className='rounded'>
+                          <button className='rounded btn btn-sm btn-outline-primary'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               width='24'
