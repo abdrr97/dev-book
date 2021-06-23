@@ -9,7 +9,8 @@
 - [ ] redirect to posts when creating a post
 - [ ] markdown in create post
 - [ ] get user profile when fetching posts in forum
-
+- [ ] ordering comments by createdAt
+- [ ] https in project url
 <!-- if we have time -->
 
 - [ ] send notification when someone replays to my post in the forum
