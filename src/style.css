@@ -2060,9 +2060,8 @@ p {
 }
 
 .text-shadow-title {
-  text-shadow: 2px 0 0 #ffffff, -2px 0 0 #ffffff,
-    0 4px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 #ffffff, 1px 1px #ffffff,
-    -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
+  text-shadow: 2px 0 0 #ffffff, -2px 0 0 #ffffff, 0 4px 0 rgba(255, 255, 255, 0.4), 0 -2px 0 #ffffff,
+    1px 1px #ffffff, -1px -1px 0 #ffffff, 1px -1px 0 #ffffff, -1px 1px 0 #ffffff;
 }
 
 .para-desc {
@@ -2637,12 +2636,7 @@ p {
     left: auto;
     right: 10px;
   }
-  #topnav
-    .navigation-menu
-    > li.last-elements
-    .submenu
-    > li.has-submenu
-    .submenu {
+  #topnav .navigation-menu > li.last-elements .submenu > li.has-submenu .submenu {
     left: auto;
     right: 100%;
     margin-left: 0;
@@ -2839,12 +2833,7 @@ p {
     opacity: 1;
     margin-top: 0;
   }
-  #topnav
-    .navigation-menu
-    > li.has-submenu:hover
-    > .submenu
-    > li.has-submenu:hover
-    > .submenu {
+  #topnav .navigation-menu > li.has-submenu:hover > .submenu > li.has-submenu:hover > .submenu {
     visibility: visible;
     opacity: 1;
     margin-left: 0;
@@ -5120,10 +5109,10 @@ p {
 /*         Footer                */
 /*===============================*/
 .footer {
-  background: #202942;
+  background: rgba(47, 85, 212, 0.9);
   padding: 60px 0;
   position: relative;
-  color: #adb5bd;
+  color: white;
 }
 
 .footer .logo-footer {
@@ -5140,8 +5129,8 @@ p {
 }
 
 .footer .foot-subscribe .form-control {
-  background-color: #27314f;
-  border: 1px solid #27314f;
+  background: rgba(47, 85, 212, 0.9);
+  border: 1px solid rgba(47, 85, 212, 0.9);
   color: #f8f9fc;
 }
 

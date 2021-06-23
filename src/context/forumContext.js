@@ -2,10 +2,12 @@ import React, { useState, useEffect, createContext, useContext } from 'react'
 import { db, storage, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 import { PortfolioContext } from './context'
+// import { useHistory } from 'react-router-dom'
 
 const ForumContext = createContext()
 
 const ForumProvider = ({ children }) => {
+  // const history = useHistory()
   const { currentUser } = useContext(AuthContext)
   const { user } = useContext(PortfolioContext)
   const [posts, setPosts] = useState([])
@@ -14,8 +16,25 @@ const ForumProvider = ({ children }) => {
     if (!currentUser) return
     const _docRef = db.collection('forum')
 
-    // upload/update image url only
     const { postImage } = _post
+    // add forum with out an image
+    if (!postImage) {
+      _docRef
+        .add({
+          post: {
+            ..._post,
+          },
+          author: user,
+          comments: [],
+          createdAt: timestamp(),
+        })
+        .finally(() => {
+          // history.push('posts')
+          window.location = '/posts'
+        })
+    }
+
+    // upload/update image url only
     const types = ['image/png', 'image/jpeg']
 
     if (postImage && types.includes(postImage.type)) {
@@ -56,9 +75,11 @@ const ForumProvider = ({ children }) => {
   }
 
   const addComment = (_post, _comment) => {
+    const date = Date.now()
     const _userComment = {
       user,
       comment: _comment,
+      createdAt: date,
     }
     console.log(_post.docId)
     const _docRef = db.collection('forum').doc(_post.docId)
@@ -74,16 +95,19 @@ const ForumProvider = ({ children }) => {
 
   // getting posts from forum collection
   useEffect(() => {
-    const unsubscribe = db.collection('forum').onSnapshot((snapshot) => {
-      const _posts = snapshot.docs.map((_doc) => {
-        return {
-          docId: _doc.id,
-          ..._doc.data(),
-        }
-      })
+    const unsubscribe = db
+      .collection('forum')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snapshot) => {
+        const _posts = snapshot.docs.map((_doc) => {
+          return {
+            docId: _doc.id,
+            ..._doc.data(),
+          }
+        })
 
-      setPosts(_posts)
-    })
+        setPosts(_posts)
+      })
 
     return unsubscribe
   }, [])

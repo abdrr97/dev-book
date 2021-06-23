@@ -26,8 +26,7 @@ const Profile = () => {
     skills: [],
   })
 
-  const { username, bio, address, birthDate, skills, experience, projects } =
-    userInfo
+  const { username, bio, address, birthDate, skills, experience, projects } = userInfo
   // Skills
   const [language, setLanguage] = useState('')
   const [percentage, setPercentage] = useState(0)
@@ -131,12 +130,7 @@ const Profile = () => {
         {message && <div className='alert alert-success'>{message}</div>}
 
         {user && (
-          <img
-            width='100'
-            className='mb-3 img-thumbnail'
-            src={user.photoURL}
-            alt={user.username}
-          />
+          <img width='100' className='mb-3 img-thumbnail' src={user.photoURL} alt={user.username} />
         )}
 
         {progress > 0 && (
@@ -158,25 +152,16 @@ const Profile = () => {
         <form onSubmit={(e) => submitHandler(e)} className='card mb-3'>
           <div className='card-body'>
             <h3>User Info</h3>
+            <input disabled value={currentUser.email} type='email' className='form-control mb-3' />
             <input
-              disabled
-              value={currentUser.email}
-              type='email'
-              className='form-control mb-3'
-            />
-            <input
-              onChange={({ target }) =>
-                setUserInfo({ ...userInfo, username: target.value })
-              }
+              onChange={({ target }) => setUserInfo({ ...userInfo, username: target.value })}
               value={username}
               placeholder='username'
               className='form-control mb-3'
               type='text'
             />
             <input
-              onChange={({ target }) =>
-                setUserInfo({ ...userInfo, bio: target.value })
-              }
+              onChange={({ target }) => setUserInfo({ ...userInfo, bio: target.value })}
               value={bio}
               placeholder='bio'
               type='text'
@@ -184,24 +169,18 @@ const Profile = () => {
             />
 
             <textarea
-              onChange={({ target }) =>
-                setUserInfo({ ...userInfo, address: target.value })
-              }
+              onChange={({ target }) => setUserInfo({ ...userInfo, address: target.value })}
               value={address}
               placeholder='Address'
               className='form-control mb-3'
             />
             <input
-              onChange={({ target }) =>
-                setUserInfo({ ...userInfo, file: target.files[0] })
-              }
+              onChange={({ target }) => setUserInfo({ ...userInfo, file: target.files[0] })}
               type='file'
               className='form-control mb-3'
             />
             <input
-              onChange={({ target }) =>
-                setUserInfo({ ...userInfo, birthDate: target.value })
-              }
+              onChange={({ target }) => setUserInfo({ ...userInfo, birthDate: target.value })}
               value={birthDate}
               type='date'
               className='form-control mb-3'
@@ -241,10 +220,7 @@ const Profile = () => {
             <ul className='list-group mb-3'>
               {skillsList.map(({ language, percentage, id }) => {
                 return (
-                  <li
-                    key={id}
-                    className='list-group-item d-flex justify-content-between'
-                  >
+                  <li key={id} className='list-group-item d-flex justify-content-between'>
                     {language} -{percentage}%
                     <button
                       onClick={() => {
@@ -264,10 +240,7 @@ const Profile = () => {
           </div>
         </form>
 
-        <form
-          onSubmit={(e) => submitExperienceHandler(e)}
-          className='card mb-3'
-        >
+        <form onSubmit={(e) => submitExperienceHandler(e)} className='card mb-3'>
           <div className='card-body'>
             <h3>Experience</h3>
 
@@ -306,17 +279,12 @@ const Profile = () => {
               {expList &&
                 expList.map(({ year, title, id }, idx) => {
                   return (
-                    <li
-                      key={id}
-                      className='list-group-item d-flex justify-content-between'
-                    >
+                    <li key={id} className='list-group-item d-flex justify-content-between'>
                       {year}, {title} - {idx + 1}
                       <button
                         onClick={() => {
                           setExpList(experience.filter((s) => s.id !== id))
-                          updateExperience(
-                            experience.filter((s) => s.id !== id)
-                          )
+                          updateExperience(experience.filter((s) => s.id !== id))
                         }}
                         type='button'
                         className='btn btn-sm btn-outline-danger'
@@ -369,19 +337,12 @@ const Profile = () => {
             <ul className='list-group mb-3'>
               {projectsList.map((_project) => {
                 return (
-                  <li
-                    key={_project.id}
-                    className='list-group-item d-flex justify-content-between'
-                  >
+                  <li key={_project.id} className='list-group-item d-flex justify-content-between'>
                     {_project.projectTitle}
                     <button
                       onClick={() => {
-                        setProjectsList(
-                          projectsList.filter((s) => s.id !== _project.id)
-                        )
-                        removeProject(
-                          projectsList.filter((s) => s.id !== _project.id)
-                        )
+                        setProjectsList(projectsList.filter((s) => s.id !== _project.id))
+                        removeProject(projectsList.filter((s) => s.id !== _project.id))
                       }}
                       type='button'
                       className='btn btn-sm btn-outline-danger'

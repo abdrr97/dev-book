@@ -6,6 +6,7 @@ import { PortfolioContext } from '../context/context'
 import { BsBellFill } from 'react-icons/bs'
 import { ChatContext } from '../context/chatContext'
 // this is a very basic component
+import logo from '../logo.svg'
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(AuthContext)
@@ -53,8 +54,8 @@ const Navbar = () => {
 
           document.title = `${notifications.from.username} sent you a message`
 
-          const audio = new Audio('/assets/wewew.m4a')
-          audio.play()
+          // const audio = new Audio('/assets/wewew.m4a')
+          // audio.play()
 
           notification.onclick = () => triggerNotification
         }
@@ -79,7 +80,7 @@ const Navbar = () => {
       <header id='topnav' className='defaultscroll sticky bg-white'>
         <div className='container'>
           <Link to='/' className='logo'>
-            <h4 className='logo-light-mode'>DevBook</h4>
+            <img alt='dev book' src={logo} className='logo-light-mode' />
           </Link>
           <div style={{ display: 'block', position: 'unset' }} id='navigation'>
             <ul className='navigation-menu'>
