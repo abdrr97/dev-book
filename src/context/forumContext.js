@@ -53,15 +53,20 @@ const ForumProvider = ({ children }) => {
             // get post image url
             // when upload is done !
 
-            _docRef.add({
-              post: {
-                ..._post,
-                postImage: url,
-              },
-              author: user,
-              comments: [],
-              createdAt: timestamp(),
-            })
+            _docRef
+              .add({
+                post: {
+                  ..._post,
+                  postImage: url,
+                },
+                author: user,
+                comments: [],
+                createdAt: timestamp(),
+              })
+              .finally(() => {
+                // history.push('posts')
+                window.location = '/posts'
+              })
           })
         }
       )

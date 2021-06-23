@@ -1,4 +1,4 @@
-- [ ] refactor Profile
+- [x] refactor Profile
 - [ ] make some validation skills / exp / projects
 - [ ] make loading
 - [x] comments in post in forum we have an issue
@@ -8,6 +8,7 @@
 - [ ] make home the landing page
 - [ ] redirect to posts when creating a post
 - [ ] markdown in create post
+- [ ] get user profile when fetching posts in forum
 
 <!-- if we have time -->
 
