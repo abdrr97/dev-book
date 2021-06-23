@@ -1,6 +1,6 @@
 import React from 'react'
 import { BsChat } from 'react-icons/bs'
-
+import Skills from './Skills'
 const Hero = ({ userInfo }) => {
   const { address, bio, birthDate, email, photoURL, username, experience, projects } = userInfo
 
@@ -80,6 +80,8 @@ const Hero = ({ userInfo }) => {
                       )
                     })}
                 </div>
+
+                <Skills />
 
                 <h4 className='mt-lg-5 mt-4'>Projects :</h4>
                 <section className='row'>
