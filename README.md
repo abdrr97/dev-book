@@ -11,6 +11,8 @@
 - [ ] get user profile when fetching posts in forum
 - [ ] ordering comments by createdAt
 - [ ] https in project url
+- [ ] improve user experience
+
 <!-- if we have time -->
 
 - [ ] send notification when someone replays to my post in the forum
