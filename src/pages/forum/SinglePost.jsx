@@ -131,13 +131,25 @@ const SinglePost = () => {
                   <li style={{ width: 90 + '%' }} key={idx} className='mt-4 card'>
                     <div className='card-body d-flex justify-content-between'>
                       <div className='d-flex align-items-center'>
-                        <Link to={`/p/${user?.username}`} className='pe-3'>
-                          <img
-                            src={user?.photoURL}
-                            className='img-fluid avatar avatar-md-sm rounded-circle shadow'
-                            alt='img'
-                          />
-                        </Link>
+                        <div className='d-flex flex-column align-items-start'>
+                          <Link to={`/p/${user?.username}`} className='pe-3'>
+                            <img
+                              src={user?.photoURL}
+                              className='img-fluid avatar avatar-md-sm rounded-circle shadow'
+                              alt='img'
+                            />
+                          </Link>
+
+                          <span
+                            className={
+                              post?.author === userEmail
+                                ? 'badge bg-success my-2'
+                                : 'badge bg-warning my-2'
+                            }
+                          >
+                            {post?.author === userEmail ? 'Author' : 'User'}
+                          </span>
+                        </div>
                         <div className='flex-1 commentor-detail'>
                           <h6 className='mb-0'>
                             <Link to={`/p/${user?.username}`} className='text-dark media-heading'>

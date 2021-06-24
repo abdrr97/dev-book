@@ -117,7 +117,7 @@ const ChatRoom = () => {
             </article>
           </div>
 
-          <article className='col-6 col-lg-6 col-md-12'>
+          <article className='col-6 col-lg-6 col-md-12 my-5'>
             <div className='card'>
               <div className='card-body'>
                 <h5 className='display-5'>Chat</h5>

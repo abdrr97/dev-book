@@ -6,8 +6,7 @@ import Skills from './Skills'
 const Hero = ({ userInfo }) => {
   const { skills, address, bio, birthDate, email, photoURL, username, experience, projects } =
     userInfo
-  const { setNotifications, notifications, setSelectedUser, changeNotificationStatus } =
-    useContext(ChatContext)
+  const { setSelectedUser } = useContext(ChatContext)
   const history = useHistory()
 
   const triggerNotification = () => {
