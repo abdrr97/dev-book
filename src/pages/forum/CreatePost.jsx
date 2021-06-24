@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { ForumContext } from '../../context/forumContext'
 import ReactMarkdown from 'react-markdown'
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { components } from '../../components/MarkdownPost'
 
 const CreatePost = () => {
