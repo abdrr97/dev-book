@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsChat } from 'react-icons/bs'
+import { useHistory } from 'react-router-dom'
+import { ChatContext } from '../../context/chatContext'
 import Skills from './Skills'
 const Hero = ({ userInfo }) => {
   const { skills, address, bio, birthDate, email, photoURL, username, experience, projects } =
     userInfo
+  const { setNotifications, notifications, setSelectedUser, changeNotificationStatus } =
+    useContext(ChatContext)
+  const history = useHistory()
+
+  const triggerNotification = () => {
+    Promise.allSettled([
+      setSelectedUser({
+        ...userInfo,
+      }),
+    ]).then(() => {
+      history.push('/chat-room')
+    })
+  }
 
   // TODO: online here
   // TODO: icons
@@ -48,7 +63,7 @@ const Hero = ({ userInfo }) => {
                     </li>
                   </ul>
                   <div className='d-grid'>
-                    <button className='btn btn-primary'>
+                    <button onClick={triggerNotification} className='btn btn-primary'>
                       <BsChat className='align-middle mx-3' />
                       Contact Me
                     </button>
@@ -100,7 +115,12 @@ const Hero = ({ userInfo }) => {
                               </a>
                               <div className='content pt-3'>
                                 <h5 className='mb-0'>
-                                  <a href='portfolio-detail-one.html' className='text-dark title'>
+                                  <a
+                                    target='_blank'
+                                    href={projectUrl}
+                                    rel='noreferrer'
+                                    className='text-dark title'
+                                  >
                                     {projectTitle}
                                   </a>
                                 </h5>

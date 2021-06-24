@@ -48,8 +48,12 @@ const CreatePost = () => {
                 className='form-control mb-3'
               />
             </div>
-            <div className='col-6'>
-              <ReactMarkdown components={components} children={post.postText} />
+            <div className='col-6' style={{ maxWidth: '300px' }}>
+              <ReactMarkdown
+                style={{ maxWidth: '300px' }}
+                components={components}
+                children={post.postText}
+              />
             </div>
           </div>
           <button className='btn btn-info'>Create Post</button>

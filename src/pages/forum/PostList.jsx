@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 import { ForumContext } from '../../context/forumContext'
 import { BiComment } from 'react-icons/bi'
 import { PortfolioContext } from '../../context/context'
-
+import ReactMarkdown from 'react-markdown'
+import { components } from '../../components/MarkdownPost'
 const PostList = () => {
   const { posts } = useContext(ForumContext)
   const { users } = useContext(PortfolioContext)
@@ -31,7 +32,7 @@ const PostList = () => {
                       <h1>{post.postTitle}?</h1>
                     </Link>
 
-                    <p>{post.postText}</p>
+                    <ReactMarkdown components={components} children={post.postText} />
 
                     <hr />
                     <div className='d-flex justify-content-between align-items-center'>
