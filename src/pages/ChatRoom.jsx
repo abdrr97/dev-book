@@ -5,6 +5,8 @@ import { RiRadioButtonLine } from 'react-icons/ri'
 import { AuthContext } from '../context/authContext'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 // as i sed in the chat context this bit difficult logic to comprehend
 const ChatRoom = () => {
@@ -43,7 +45,8 @@ const ChatRoom = () => {
 
   return (
     <>
-      <section className='mt-5 container'>
+      <Navbar />
+      <section className='container mx-height '>
         <div className='row'>
           <div className=' col-5 col-lg-5 col-md-12 my-5'>
             <article className='card '>
@@ -53,7 +56,7 @@ const ChatRoom = () => {
                 <ul className='media-list list-unstyled mb-0'>
                   {users
                     // => this filter is if you want to message your self (if you are crazy enough)
-                    ?.filter((_user) => _user?.room?.includes(currentUser.email))
+                    // ?.filter((_user) => _user?.room?.includes(currentUser.email))
                     ?.map((_user) => {
                       const { uid, docId, online, photoURL, username } = _user
                       return (
@@ -190,6 +193,7 @@ const ChatRoom = () => {
           </article>
         </div>
       </section>
+      <Footer />
     </>
   )
 }

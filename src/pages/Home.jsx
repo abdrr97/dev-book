@@ -2,13 +2,16 @@ import React, { useContext } from 'react'
 import { PortfolioContext } from '../context/context'
 import { Link } from 'react-router-dom'
 import { RiRadioButtonLine } from 'react-icons/ri'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const Home = () => {
   const { users } = useContext(PortfolioContext)
 
   return (
     <>
-      <main className='container mt-5'>
+      <Navbar />
+      <main className='container mx-height '>
         <h3 className='display-3 mb-3'>Home</h3>
 
         {users.length === 0 && (
@@ -88,6 +91,7 @@ const Home = () => {
           })}
         </section>
       </main>
+      <Footer />
     </>
   )
 }

@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioContext } from '../context/context'
 import { AuthContext } from '../context/authContext'
 import { FiTrash2 } from 'react-icons/fi'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 // i refactored this to be much cleaner and more understandable
 const Profile = () => {
@@ -130,7 +132,8 @@ const Profile = () => {
 
   return (
     <>
-      <section className='container mt-5'>
+      <Navbar />
+      <section className='container mx-height '>
         <h3 className='display-3'>Profile</h3>
         {message && <div className='alert alert-success'>{message}</div>}
 
@@ -366,6 +369,7 @@ const Profile = () => {
           </div>
         </form>
       </section>
+      <Footer />
     </>
   )
 }

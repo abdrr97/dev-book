@@ -7,6 +7,8 @@ import moment from 'moment'
 import { PortfolioContext } from '../../context/context'
 import ReactMarkdown from 'react-markdown'
 import { components } from '../../components/MarkdownPost'
+import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
 
 const SinglePost = () => {
   const { currentUser } = useContext(AuthContext)
@@ -71,7 +73,8 @@ const SinglePost = () => {
   if (exists) {
     return (
       <>
-        <main className='container'>
+        <Navbar />
+        <main className='container mx-height '>
           <div className='row mb-3'>
             <div className='col-12'>
               <h1 className='display-1'>Post</h1>
@@ -168,6 +171,7 @@ const SinglePost = () => {
               })}
           </ul>
         </main>
+        <Footer />
       </>
     )
   }

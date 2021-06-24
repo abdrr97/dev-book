@@ -3,7 +3,7 @@ import { AiOutlineHeart } from 'react-icons/ai'
 
 const Footer = () => {
   return (
-    <footer className='footer footer-bar mt-5'>
+    <footer className='footer footer-bar '>
       <div className='container text-center'>
         <div className='row align-items-center'>
           <div className='col-sm-6'>

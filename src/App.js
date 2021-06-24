@@ -13,8 +13,6 @@ import Portfolio from './pages/Portfolio'
 
 // private route
 import PrivateRoute from './routes/PrivateRoute'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
 import ChatRoom from './pages/ChatRoom'
 import { AuthContext } from './context/authContext'
 import { db } from './firebase'
@@ -47,7 +45,6 @@ export const App = () => {
   return (
     <>
       <Router>
-        <Navbar />
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/log-in' component={Login} />
@@ -63,7 +60,6 @@ export const App = () => {
 
           <Route path='*' component={NotFound} />
         </Switch>
-        <Footer></Footer>
       </Router>
     </>
   )

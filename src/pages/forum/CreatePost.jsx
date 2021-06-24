@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react'
 import { ForumContext } from '../../context/forumContext'
 import ReactMarkdown from 'react-markdown'
 import { components } from '../../components/MarkdownPost'
+import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
 
 const CreatePost = () => {
   const { createPost } = useContext(ForumContext)
@@ -22,7 +24,8 @@ const CreatePost = () => {
 
   return (
     <>
-      <main className='container mt-5'>
+      <Navbar />
+      <main className='container mx-height '>
         <h1 className='display-4'>Create Post</h1>
 
         <form onSubmit={(e) => submitHandler(e)}>
@@ -59,6 +62,7 @@ const CreatePost = () => {
           <button className='btn btn-info'>Create Post</button>
         </form>
       </main>
+      <Footer />
     </>
   )
 }

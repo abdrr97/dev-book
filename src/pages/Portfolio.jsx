@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import { PortfolioContext } from '../context/context'
 import Hero from '../components/portfolio/Hero'
 import PageLoading from '../components/PageLoading'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 
 const Portfolio = () => {
   const { username } = useParams()
@@ -48,7 +50,11 @@ const Portfolio = () => {
   if (exists) {
     return (
       <>
-        <Hero userInfo={userInfo} />
+        <Navbar />
+        <div className='mx-height'>
+          <Hero userInfo={userInfo} />
+        </div>
+        <Footer />
       </>
     )
   }
