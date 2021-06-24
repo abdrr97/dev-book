@@ -1,5 +1,9 @@
 import React, { useContext, useState } from 'react'
 import { ForumContext } from '../../context/forumContext'
+import ReactMarkdown from 'react-markdown'
+import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { components } from '../../components/MarkdownPost'
 
 const CreatePost = () => {
   const { createPost } = useContext(ForumContext)
@@ -26,28 +30,30 @@ const CreatePost = () => {
         <form onSubmit={(e) => submitHandler(e)}>
           <input
             value={post.postTitle}
-            onChange={({ target }) =>
-              setPost({ ...post, postTitle: target.value })
-            }
+            onChange={({ target }) => setPost({ ...post, postTitle: target.value })}
             className='form-control mb-3'
             placeholder='title'
             type='text'
           />
           <input
-            onChange={({ target }) =>
-              setPost({ ...post, postImage: target.files[0] })
-            }
+            onChange={({ target }) => setPost({ ...post, postImage: target.files[0] })}
             className='form-control mb-3'
             type='file'
           />
-          <textarea
-            placeholder='Enter more information ....'
-            value={post.postText}
-            onChange={({ target }) =>
-              setPost({ ...post, postText: target.value })
-            }
-            className='form-control mb-3'
-          />
+          <div className='row'>
+            <div className='col-6'>
+              <textarea
+                rows='15'
+                placeholder='Enter more information ....'
+                value={post.postText}
+                onChange={({ target }) => setPost({ ...post, postText: target.value })}
+                className='form-control mb-3'
+              />
+            </div>
+            <div className='col-6'>
+              <ReactMarkdown components={components} children={post.postText} />
+            </div>
+          </div>
           <button className='btn btn-info'>Create Post</button>
         </form>
       </main>

@@ -3,11 +3,12 @@ import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../context/authContext'
 import { db, timestamp } from '../../firebase'
-import { FiHome, FiMail, FiKey } from 'react-icons/fi'
+import { FiHome, FiMail, FiKey, FiUser } from 'react-icons/fi'
 import { DEFAULT_PROFILE_AVATAR } from '../../constants'
 
 const SignUp = () => {
   const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
@@ -19,34 +20,54 @@ const SignUp = () => {
     if (password.trim() !== confirmPassword.trim()) {
       return setError('Passwords do not match 😭😭')
     }
+    if (username.trim() === '') {
+      return setError('Username is Required')
+    }
     setIsLoading(true)
     setError('')
 
     try {
-      signup(email, password)
-        .then(({ user }) => {
-          db.collection('users')
-            .doc(email)
-            .set({
-              username: '',
-              bio: '',
-              address: '',
-              birthDate: '',
-              photoURL: DEFAULT_PROFILE_AVATAR,
-              uid: user.uid,
-              email: email,
-              lastLoggedIn: timestamp(),
-            })
-            .then(() => {
-              window.location = '/profile'
-            })
+      db.collection('users')
+        .where('username', '==', username)
+        .get()
+        .then((snapshot) => {
+          const _users = snapshot.docs.map((doc) => {
+            return doc.data()
+          })
+
+          if (_users?.length <= 0) {
+            signup(email, password)
+              .then(({ user }) => {
+                db.collection('users')
+                  .doc(email)
+                  .set({
+                    username: username,
+                    bio: '',
+                    address: '',
+                    birthDate: '',
+                    photoURL: DEFAULT_PROFILE_AVATAR,
+                    uid: user.uid,
+                    email: email,
+                    lastLoggedIn: timestamp(),
+                  })
+                  .then(() => {
+                    window.location = '/profile'
+                  })
+              })
+              .catch((err) => {
+                setError(err.message)
+              })
+              .finally(() => {
+                // after the sign up user will be directed to his profile
+                setIsLoading(false)
+              })
+          } else {
+            setError('Username Already Taken ')
+            setIsLoading(false)
+          }
         })
         .catch((err) => {
-          setError(err.message)
-        })
-        .finally(() => {
-          // after the sign up user will be directed to his profile
-          setIsLoading(false)
+          setError(err)
         })
     } catch (ex) {
       setError(ex.message)
@@ -76,6 +97,27 @@ const SignUp = () => {
                     {error && <div className='alert alert-danger'>{error}</div>}
 
                     <div className='row'>
+                      <div className='col-md-12'>
+                        <div className='mb-3'>
+                          <label className='form-label'>
+                            Your Username <span className='text-danger'>*</span>
+                          </label>
+                          <div className='form-icon position-relative'>
+                            <FiUser className='fea icon-sm icons' />
+
+                            <input
+                              value={username}
+                              onChange={(event) => setUsername(event.target.value)}
+                              required
+                              id='username'
+                              name='username'
+                              type='text'
+                              placeholder='Enter your username here'
+                              className='form-control ps-5'
+                            />
+                          </div>
+                        </div>
+                      </div>
                       <div className='col-md-12'>
                         <div className='mb-3'>
                           <label className='form-label'>

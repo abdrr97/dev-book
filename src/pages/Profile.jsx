@@ -29,7 +29,7 @@ const Profile = () => {
   const { username, bio, address, birthDate, skills, experience, projects } = userInfo
   // Skills
   const [language, setLanguage] = useState('')
-  const [percentage, setPercentage] = useState(0)
+  const [percentage, setPercentage] = useState(50)
   const [skillsList, setSkillsList] = useState([])
 
   // Exp
@@ -57,16 +57,21 @@ const Profile = () => {
   const submitSkillHandler = (e) => {
     e.preventDefault()
     // add skills
-    userInfo.skills = [
-      ...skills,
-      {
-        id: Date.now(),
-        language,
-        percentage,
-      },
-    ]
-    updateSkill(userInfo.skills)
-    setPercentage(0)
+
+    if (language.trim() !== '') {
+      userInfo.skills = [
+        ...skills,
+        {
+          id: Date.now(),
+          language,
+          percentage,
+        },
+      ]
+      updateSkill(userInfo.skills)
+      setPercentage(50)
+    } else {
+      // set an error
+    }
   }
 
   const submitExperienceHandler = (e) => {
@@ -194,10 +199,14 @@ const Profile = () => {
             <h3>Skills</h3>
             <label htmlFor='lang'>Language - {language}</label>
             <select
+              defaultValue='select-value'
               onChange={({ target }) => setLanguage(target.value)}
-              id='lang'
               className='form-select mb-3'
+              id='lang'
             >
+              <option disabled value='select-value'>
+                Select an Option
+              </option>
               <option value='HTML'>HTML</option>
               <option value='CSS'>CSS</option>
               <option value='JS'>JS</option>

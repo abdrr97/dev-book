@@ -13,7 +13,7 @@ const ForumProvider = ({ children }) => {
   const [posts, setPosts] = useState([])
 
   const createPost = (_post) => {
-    if (!currentUser) return
+    if (!currentUser && !user.username) return
     const _docRef = db.collection('forum')
 
     const { postImage } = _post
@@ -24,7 +24,7 @@ const ForumProvider = ({ children }) => {
           post: {
             ..._post,
           },
-          author: user,
+          author: user.email,
           comments: [],
           createdAt: timestamp(),
         })
@@ -59,7 +59,7 @@ const ForumProvider = ({ children }) => {
                   ..._post,
                   postImage: url,
                 },
-                author: user,
+                author: user.email,
                 comments: [],
                 createdAt: timestamp(),
               })
@@ -82,11 +82,10 @@ const ForumProvider = ({ children }) => {
   const addComment = (_post, _comment) => {
     const date = Date.now()
     const _userComment = {
-      user,
+      userEmail: user.email,
       comment: _comment,
       createdAt: date,
     }
-    console.log(_post.docId)
     const _docRef = db.collection('forum').doc(_post.docId)
 
     _docRef.get().then((_doc) => {

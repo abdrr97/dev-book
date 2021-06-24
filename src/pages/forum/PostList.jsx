@@ -3,9 +3,11 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ForumContext } from '../../context/forumContext'
 import { BiComment } from 'react-icons/bi'
+import { PortfolioContext } from '../../context/context'
 
 const PostList = () => {
   const { posts } = useContext(ForumContext)
+  const { users } = useContext(PortfolioContext)
 
   return (
     <main className='container'>
@@ -18,7 +20,9 @@ const PostList = () => {
 
       <div className='row my-5'>
         {posts &&
-          posts.map(({ docId, author, post, comments, createdAt }) => {
+          posts.map(({ docId, author: authorEmail, post, comments, createdAt }) => {
+            const author = users?.find((_user) => _user.docId === authorEmail)
+
             return (
               <div key={docId} className='col-12 mb-3'>
                 <div className='card shadow-md rounded-md'>
@@ -33,12 +37,12 @@ const PostList = () => {
                     <div className='d-flex justify-content-between align-items-center'>
                       <div>
                         <img
-                          alt={author.username}
-                          src={author.photoURL}
+                          alt={author?.username}
+                          src={author?.photoURL}
                           className='img-fluid avatar avatar-ex-sm rounded-circle'
                         />
                         <span className='mx-2'>Posted By</span>
-                        <Link to={`/p/${author.username}`}>{author.username}</Link>
+                        <Link to={`/p/${author?.username}`}>{author?.username}</Link>
                         <small className='mx-2'>
                           {createdAt && moment(createdAt.toDate(), 'MMDDYY').fromNow()}
                         </small>

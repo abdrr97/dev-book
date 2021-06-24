@@ -17,7 +17,7 @@ const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const triggerNotification = () => {
-    if (notifications.from) {
+    if (notifications?.from) {
       Promise.allSettled([
         setSelectedUser({
           ...notifications.from,

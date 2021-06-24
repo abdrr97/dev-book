@@ -159,9 +159,7 @@ const PortfolioProvider = ({ children }) => {
     // getting users only if they have a username
     const unsubscribe = db.collection('users').onSnapshot((snapshot) => {
       const _users = snapshot.docs
-        .filter((_doc) => {
-          return _doc.data().username !== '' ? true : false
-        })
+        .filter((_doc) => (_doc.data().username !== '' ? true : false))
         .map((_doc) => {
           return {
             docId: _doc.id,

@@ -1,6 +1,6 @@
 - [x] refactor Profile
-- [ ] make some validation skills / exp / projects
-- [ ] make loading
+- [x] make some validation skills / exp / projects
+<!-- - [ ] make loading -->
 - [x] comments in post in forum we have an issue
 - [ ] make chat room look nicer
 - [ ] make forum look nicer
@@ -12,6 +12,7 @@
 - [ ] ordering comments by createdAt
 - [ ] https in project url
 - [ ] improve user experience
+- [ ] post image null
 
 <!-- if we have time -->
 
