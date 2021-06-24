@@ -2,7 +2,8 @@ import React from 'react'
 import { BsChat } from 'react-icons/bs'
 import Skills from './Skills'
 const Hero = ({ userInfo }) => {
-  const { address, bio, birthDate, email, photoURL, username, experience, projects } = userInfo
+  const { skills, address, bio, birthDate, email, photoURL, username, experience, projects } =
+    userInfo
 
   // TODO: online here
   // TODO: icons
@@ -62,26 +63,23 @@ const Hero = ({ userInfo }) => {
                 <p className='text-muted mb-0'>{bio}</p>
                 <h4 className='mt-lg-5 mt-4'>Experience :</h4>
                 <div className='row'>
-                  {experience &&
-                    experience.map(({ year, title, company, description }) => {
-                      return (
-                        <div className='col-lg-12 mt-4 pt-2'>
-                          <div className='d-flex'>
-                            <div className='company-logo text-muted h6 me-3 text-center'>
-                              {year}
-                            </div>
-                            <div className='flex-1'>
-                              <h5 className='title mb-0'>{title}</h5>
-                              <small className='text-muted company-university'>{company}</small>
-                              <p className='text-muted mt-2 mb-0'>{description}</p>
-                            </div>
+                  {experience?.map(({ year, title, company, description }) => {
+                    return (
+                      <div className='col-lg-12 mt-4 pt-2'>
+                        <div className='d-flex'>
+                          <div className='company-logo text-muted h6 me-3 text-center'>{year}</div>
+                          <div className='flex-1'>
+                            <h5 className='title mb-0'>{title}</h5>
+                            <small className='text-muted company-university'>{company}</small>
+                            <p className='text-muted mt-2 mb-0'>{description}</p>
                           </div>
                         </div>
-                      )
-                    })}
+                      </div>
+                    )
+                  })}
                 </div>
 
-                <Skills />
+                <Skills skills={skills} />
 
                 <h4 className='mt-lg-5 mt-4'>Projects :</h4>
                 <section className='row'>
