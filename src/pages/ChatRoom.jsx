@@ -53,7 +53,7 @@ const ChatRoom = () => {
                 <ul className='media-list list-unstyled mb-0'>
                   {users
                     // => this filter is if you want to message your self (if you are crazy enough)
-                    ?.filter((_user) => _user.docId !== currentUser.email)
+                    ?.filter((_user) => _user?.room?.includes(currentUser.email))
                     ?.map((_user) => {
                       const { uid, docId, online, photoURL, username } = _user
                       return (
