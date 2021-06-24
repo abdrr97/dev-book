@@ -51,9 +51,9 @@ const Portfolio = () => {
     return (
       <>
         <Navbar />
-        <div className='mx-height'>
-          <Hero userInfo={userInfo} />
-        </div>
+
+        <Hero userInfo={userInfo} />
+
         <Footer />
       </>
     )
