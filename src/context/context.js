@@ -11,6 +11,7 @@ const PortfolioProvider = ({ children }) => {
   const [message, setMessage] = useState('')
   const [user, setUser] = useState(null)
   const [progress, setProgress] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   // this method is looking for a users by its username
   // and returns his doc when its found
@@ -22,13 +23,13 @@ const PortfolioProvider = ({ children }) => {
     // if no user is logged in return
     // (don't execute the other code)
     if (!currentUser) return
-
+    setLoading(true)
     const _docRef = db.collection('users').doc(currentUser.email)
     // upload/update image url only
     const types = ['image/png', 'image/jpeg']
 
     if (file && types.includes(file.type)) {
-      const stgRef = storage.ref(currentUser.uid)
+      const stgRef = storage.ref('images' + file.name + currentUser.uid)
       stgRef.put(file).on(
         'state_changed',
         (snap) => {
@@ -36,7 +37,7 @@ const PortfolioProvider = ({ children }) => {
           const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
           setProgress(_percentage)
         },
-        (err) => {},
+        (err) => setLoading(false),
         () => {
           // on finish upload
           stgRef.getDownloadURL().then((url) => {
@@ -44,6 +45,7 @@ const PortfolioProvider = ({ children }) => {
               .update({
                 bgImage: url,
               })
+              .then(() => setLoading(false))
               .finally(() => setProgress(0))
           })
         }
@@ -57,6 +59,7 @@ const PortfolioProvider = ({ children }) => {
     // (don't execute the other code)
     if (!currentUser) return
 
+    setLoading(true)
     // change username if not exists in users collection
     let exists = false
     const _docRef = db.collection('users').doc(currentUser.email)
@@ -72,9 +75,11 @@ const PortfolioProvider = ({ children }) => {
         })
         exists = data.length > 0 ? true : false
         if (!exists) {
-          _docRef.update({
-            username: info.username,
-          })
+          _docRef
+            .update({
+              username: info.username,
+            })
+            .finally(() => setLoading(false))
           setMessage('user was updated successfully')
         }
       })
@@ -93,7 +98,7 @@ const PortfolioProvider = ({ children }) => {
           const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
           setProgress(_percentage)
         },
-        (err) => {},
+        (err) => setLoading(false),
         () => {
           // on finish upload
           stgRef.getDownloadURL().then((url) => {
@@ -101,6 +106,7 @@ const PortfolioProvider = ({ children }) => {
               .update({
                 photoURL: url,
               })
+              .then(() => setLoading(false))
               .finally(() => {
                 setMessage('user profile image was updated successfully')
                 setProgress(0)
@@ -116,7 +122,8 @@ const PortfolioProvider = ({ children }) => {
         address: info.address,
         birthDate: info.birthDate,
       })
-      .then(() => {
+      .then(() => setLoading(false))
+      .finally(() => {
         setMessage('user profile info was updated successfully')
       })
 
@@ -126,21 +133,28 @@ const PortfolioProvider = ({ children }) => {
   }
 
   const updateSkill = (skills) => {
+    setLoading(true)
     const _docRef = db.collection('users').doc(currentUser.email)
-    _docRef.update({
-      skills: skills,
-    })
+    _docRef
+      .update({
+        skills: skills,
+      })
+      .finally(() => setLoading(false))
   }
 
   const updateExperience = (_experience) => {
+    setLoading(true)
     const _docRef = db.collection('users').doc(currentUser.email)
-    _docRef.update({
-      experience: _experience,
-    })
+    _docRef
+      .update({
+        experience: _experience,
+      })
+      .finally(() => setLoading(false))
   }
 
   // adding projects to firestore / storage
   const addProject = (_projectObj, _projects) => {
+    setLoading(true)
     const _docRef = db.collection('users').doc(currentUser.email)
 
     // upload/update image url only
@@ -156,7 +170,7 @@ const PortfolioProvider = ({ children }) => {
           const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
           setProgress(_percentage)
         },
-        (err) => {},
+        (err) => setLoading(false),
         () => {
           // on finish upload
           stgRef.getDownloadURL().then((url) => {
@@ -170,6 +184,7 @@ const PortfolioProvider = ({ children }) => {
                   },
                 ],
               })
+              .then(() => setLoading(false))
               .finally(() => {
                 setMessage('user profile image was updated successfully')
                 setProgress(0)
@@ -182,10 +197,13 @@ const PortfolioProvider = ({ children }) => {
 
   // remove project from fire store
   const removeProject = (_projects) => {
+    setLoading(true)
     const _docRef = db.collection('users').doc(currentUser.email)
-    _docRef.update({
-      projects: _projects,
-    })
+    _docRef
+      .update({
+        projects: _projects,
+      })
+      .then(() => setLoading(false))
   }
 
   useEffect(() => {
@@ -235,6 +253,8 @@ const PortfolioProvider = ({ children }) => {
     addProject,
     removeProject,
     changeUserBackground,
+    loading,
+    setLoading,
   }
 
   return <PortfolioContext.Provider value={values} children={children} />

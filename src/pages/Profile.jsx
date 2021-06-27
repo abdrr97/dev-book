@@ -17,6 +17,8 @@ const Profile = () => {
     updateExperience,
     addProject,
     removeProject,
+    loading,
+    setLoading,
   } = useContext(PortfolioContext)
 
   const [userInfo, setUserInfo] = useState({
@@ -52,6 +54,7 @@ const Profile = () => {
     e.preventDefault()
 
     if (username.trim() !== '') {
+      setLoading(true)
       updateUserProfile(userInfo)
     }
   }
@@ -61,6 +64,7 @@ const Profile = () => {
     // add skills
 
     if (language.trim() !== '') {
+      setLoading(true)
       userInfo.skills = [
         ...skills,
         {
@@ -79,6 +83,7 @@ const Profile = () => {
   const submitExperienceHandler = (e) => {
     e.preventDefault()
     // add skills
+    setLoading(true)
     userInfo.experience = [
       ...experience,
       {
@@ -99,6 +104,7 @@ const Profile = () => {
   const submitProjectHandler = (e) => {
     e.preventDefault()
 
+    setLoading(true)
     // add project
     const _projectObj = {
       id: Date.now(),
@@ -112,6 +118,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
+      setLoading(true)
       setUserInfo({
         username: user.username || '',
         bio: user.bio || '',
@@ -128,7 +135,9 @@ const Profile = () => {
       setExpList(user.experience || [])
       setProjectsList(user.projects || [])
     }
-  }, [user])
+  }, [user, setLoading])
+
+  console.log(loading)
 
   return (
     <>
@@ -143,7 +152,6 @@ const Profile = () => {
 
         {progress > 0 && (
           <div className='progress mb-3'>
-            Uploading
             <div
               className='progress-bar progress-bar-striped progress-bar-animated'
               role='progressbar'
@@ -152,7 +160,7 @@ const Profile = () => {
               aria-valuemax='100'
               style={{ width: progress + '%' }}
             >
-              {progress + '%'}
+              {progress.toFixed(1) + '%'}
             </div>
           </div>
         )}
@@ -193,7 +201,15 @@ const Profile = () => {
               type='date'
               className='form-control mb-3'
             />
-            <button className='btn btn-primary mb-3'>Save</button>
+            <button disabled={loading} className='btn btn-primary mb-3'>
+              {loading ? (
+                <div className='d-flex justify-content-center'>
+                  <div className='spinner-border'></div>
+                </div>
+              ) : (
+                'Save'
+              )}
+            </button>
           </div>
         </form>
 
@@ -248,7 +264,15 @@ const Profile = () => {
                 )
               })}
             </ul>
-            <button className='btn btn-primary mb-3'>Save</button>
+            <button disabled={loading} className='btn btn-primary mb-3'>
+              {loading ? (
+                <div className='d-flex justify-content-center'>
+                  <div className='spinner-border'></div>
+                </div>
+              ) : (
+                'Save'
+              )}
+            </button>
           </div>
         </form>
 
@@ -307,7 +331,15 @@ const Profile = () => {
                   )
                 })}
             </ul>
-            <button className='btn btn-primary mb-3'>Save</button>
+            <button disabled={loading} className='btn btn-primary mb-3'>
+              {loading ? (
+                <div className='d-flex justify-content-center'>
+                  <div className='spinner-border'></div>
+                </div>
+              ) : (
+                'Save'
+              )}
+            </button>
           </div>
         </form>
 
@@ -365,7 +397,15 @@ const Profile = () => {
                 )
               })}
             </ul>
-            <button className='btn btn-primary mb-3'>Save</button>
+            <button disabled={loading} className='btn btn-primary mb-3'>
+              {loading ? (
+                <div className='d-flex justify-content-center'>
+                  <div className='spinner-border'></div>
+                </div>
+              ) : (
+                'Save'
+              )}
+            </button>
           </div>
         </form>
       </section>
