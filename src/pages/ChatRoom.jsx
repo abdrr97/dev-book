@@ -12,8 +12,13 @@ import Footer from '../components/Footer'
 const ChatRoom = () => {
   const { currentUser } = useContext(AuthContext)
   const { users } = useContext(PortfolioContext)
-  const { messages, startConversation, selectedUser, setSelectedUser, notifications } =
-    useContext(ChatContext)
+  const {
+    messages,
+    startConversation,
+    selectedUser,
+    setSelectedUser,
+    notifications,
+  } = useContext(ChatContext)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -51,70 +56,72 @@ const ChatRoom = () => {
           <div className=' col-5 col-lg-5 col-md-12 my-5'>
             <article className='card '>
               <div className='card-body'>
-                <h5 className='card-title mb-0'>Users</h5>
+                <h5 className='card-title mb-0'>Users | {users?.length}</h5>
 
                 <ul className='media-list list-unstyled mb-0'>
-                  {users
-                    // => this filter is if you want to message your self (if you are crazy enough)
-                    // ?.filter((_user) => _user?.room?.includes(currentUser.email))
-                    ?.map((_user) => {
-                      const { uid, docId, online, photoURL, username } = _user
-                      return (
-                        <li key={uid} className='mt-4'>
-                          <div className='d-flex  align-items-center'>
-                            <Link to={`/p/${username}`} className='pe-3'>
-                              <img
-                                className='img-fluid avatar avatar-md-sm rounded-circle shadow'
-                                src={photoURL}
-                                alt={username}
-                              />
-                            </Link>
-                            <div className='flex-1 commentor-detail'>
-                              <h6 className='mb-0'>
-                                <Link to={`/p/${username}`} className='text-dark media-heading'>
-                                  {docId}
-                                </Link>
-                              </h6>
-                              <small className='text-muted'>
-                                <button
-                                  className={
-                                    selectedUser?.uid === uid
-                                      ? 'btn btn-sm btn-primary'
-                                      : 'btn btn-sm btn-outline-primary'
-                                  }
-                                  onClick={() =>
-                                    setSelectedUser({
-                                      ..._user,
-                                      email: _user.docId,
-                                    })
-                                  }
-                                >
-                                  {username}
-                                </button>
-                              </small>
-                            </div>
-                            <span
-                              className={
-                                online === 'ONLINE'
-                                  ? 'text-success'
-                                  : online === 'OFFLINE'
-                                  ? 'text-danger'
-                                  : 'text-warning'
-                              }
-                            >
-                              <RiRadioButtonLine />
-                            </span>
-                            {notifications &&
-                              notifications.from &&
-                              notifications.from.email.includes(docId) && (
-                                <span className={'text-danger'}>
-                                  <RiRadioButtonLine />
-                                </span>
-                              )}
+                  {/* // => this filter is if you want to message your self (if you are crazy enough)
+                  // ?.filter((_user) => _user?.room?.includes(currentUser.email)) */}
+                  {users?.map((_user) => {
+                    const { uid, docId, online, photoURL, username } = _user
+                    return (
+                      <li key={uid} className='mt-4'>
+                        <div className='d-flex  align-items-center'>
+                          <Link to={`/p/${username}`} className='pe-3'>
+                            <img
+                              className='img-fluid avatar avatar-md-sm rounded-circle shadow'
+                              src={photoURL}
+                              alt={username}
+                            />
+                          </Link>
+                          <div className='flex-1 commentor-detail'>
+                            <h6 className='mb-0'>
+                              <Link
+                                to={`/p/${username}`}
+                                className='text-dark media-heading'
+                              >
+                                {docId}
+                              </Link>
+                            </h6>
+                            <small className='text-muted'>
+                              <button
+                                className={
+                                  selectedUser?.uid === uid
+                                    ? 'btn btn-sm btn-primary'
+                                    : 'btn btn-sm btn-outline-primary'
+                                }
+                                onClick={() =>
+                                  setSelectedUser({
+                                    ..._user,
+                                    email: _user.docId,
+                                  })
+                                }
+                              >
+                                {username}
+                              </button>
+                            </small>
                           </div>
-                        </li>
-                      )
-                    })}
+                          <span
+                            className={
+                              online === 'ONLINE'
+                                ? 'text-success'
+                                : online === 'OFFLINE'
+                                ? 'text-danger'
+                                : 'text-warning'
+                            }
+                          >
+                            <RiRadioButtonLine />
+                          </span>
+                          {notifications &&
+                            notifications.from &&
+                            notifications.from.email.includes(docId) && (
+                              <span className={'text-danger'}>
+                                <RiRadioButtonLine />
+                              </span>
+                            )}
+                        </div>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
             </article>
@@ -142,7 +149,10 @@ const ChatRoom = () => {
                   {messages.map(({ message, uid, email, createdAt }, idx) => {
                     const author = users?.find((_user) => _user.docId === email)
                     return (
-                      <section key={idx} className='list-group-item d-flex justify-content-between'>
+                      <section
+                        key={idx}
+                        className='list-group-item d-flex justify-content-between'
+                      >
                         <article className='d-flex align-items-center'>
                           <div className='d-flex align-items-start flex-column justify-content-center'>
                             <img

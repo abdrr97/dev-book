@@ -2,7 +2,6 @@ import React, { useState, useEffect, createContext, useContext } from 'react'
 import { db, storage, timestamp } from '../firebase'
 import { AuthContext } from './authContext'
 import { PortfolioContext } from './context'
-// import { useHistory } from 'react-router-dom'
 
 const ForumContext = createContext()
 
@@ -11,6 +10,7 @@ const ForumProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext)
   const { user } = useContext(PortfolioContext)
   const [posts, setPosts] = useState([])
+  const [progress, setProgress] = useState(0)
 
   const createPost = (_post) => {
     if (!currentUser && !user.username) return
@@ -29,7 +29,6 @@ const ForumProvider = ({ children }) => {
           createdAt: timestamp(),
         })
         .finally(() => {
-          // history.push('posts')
           window.location = '/posts'
         })
     }
@@ -43,8 +42,8 @@ const ForumProvider = ({ children }) => {
         'state_changed',
         (snap) => {
           // uploading
-          //   const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
-          //   setProgress(_percentage)
+          const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+          setProgress(_percentage)
         },
         (err) => {},
         () => {
@@ -116,7 +115,7 @@ const ForumProvider = ({ children }) => {
     return unsubscribe
   }, [])
 
-  const values = { posts, createPost, isPostExists, addComment }
+  const values = { posts, createPost, isPostExists, addComment, progress }
 
   return <ForumContext.Provider value={values} children={children} />
 }

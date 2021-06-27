@@ -6,7 +6,7 @@ import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 
 const CreatePost = () => {
-  const { createPost } = useContext(ForumContext)
+  const { createPost, progress } = useContext(ForumContext)
 
   const [post, setPost] = useState({
     postTitle: '',
@@ -41,25 +41,17 @@ const CreatePost = () => {
             className='form-control mb-3'
             type='file'
           />
-          <div className='row'>
-            <div className='col-6'>
-              <textarea
-                rows='15'
-                placeholder='Enter more information ....'
-                value={post.postText}
-                onChange={({ target }) => setPost({ ...post, postText: target.value })}
-                className='form-control mb-3'
-              />
-            </div>
-            <div className='col-6' style={{ maxWidth: '300px' }}>
-              <ReactMarkdown
-                style={{ maxWidth: '300px' }}
-                components={components}
-                children={post.postText}
-              />
-            </div>
-          </div>
-          <button className='btn btn-info'>Create Post</button>
+          <textarea
+            rows='15'
+            placeholder='Enter more information ....'
+            value={post.postText}
+            onChange={({ target }) => setPost({ ...post, postText: target.value })}
+            className='form-control mb-3'
+          />
+          <ReactMarkdown components={components} children={post.postText} />
+          <button className='btn btn-info'>
+            {progress ? `Creating ... ${progress?.toFixed(1)}%` : 'Create Post'}
+          </button>
         </form>
       </main>
       <Footer />

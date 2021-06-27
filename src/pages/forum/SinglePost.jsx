@@ -80,17 +80,36 @@ const SinglePost = () => {
               <h1 className='display-1'>Post</h1>
               <div className='card'>
                 <div className='card-body'>
-                  <h5>{author?.username}</h5>
-                  {author?.photoURL && (
-                    <img width='50' src={author?.photoURL} alt={author?.username} />
-                  )}
+                  <div className='d-flex flex-column'>
+                    {author?.photoURL && (
+                      <Link to={`/p/${author?.username}`}>
+                        <img
+                          className='rounded-lg'
+                          width='50'
+                          src={author?.photoURL}
+                          alt={author?.username}
+                        />
+                      </Link>
+                    )}
+                    <Link to={`/p/${author?.username}`}>
+                      <p className='text-uppercase'>{author?.username}</p>
+                    </Link>
+                  </div>
+
                   <div className='card my-5 '>
                     <div className='card-body'>
                       <h3>{post.post.postTitle}</h3>
                       {post.post.postImage && (
-                        <img width='200' src={post.post.postImage} alt={post.post.postTitle} />
+                        <img
+                          width='200'
+                          src={post.post.postImage}
+                          alt={post.post.postTitle}
+                        />
                       )}
-                      <ReactMarkdown components={components} children={post.post.postText} />
+                      <ReactMarkdown
+                        components={components}
+                        children={post.post.postText}
+                      />
                     </div>
                   </div>
                 </div>
@@ -102,7 +121,10 @@ const SinglePost = () => {
               <h4>Leave A Comment :</h4>
 
               {currentUser ? (
-                <form onSubmit={(e) => submitCommentHandler(e)} className='mb-4'>
+                <form
+                  onSubmit={(e) => submitCommentHandler(e)}
+                  className='mb-4'
+                >
                   <label htmlFor='comment'>Your Comment</label>
                   <div className='row'>
                     <div className='col-6'>
@@ -115,7 +137,10 @@ const SinglePost = () => {
                       />
                     </div>
                     <div className='col-6'>
-                      <ReactMarkdown components={components} children={comment} />
+                      <ReactMarkdown
+                        components={components}
+                        children={comment}
+                      />
                     </div>
                   </div>
                   <button className='btn btn-sm btn-info'>Submit</button>
@@ -131,7 +156,11 @@ const SinglePost = () => {
               .map(({ userEmail, comment, createdAt }, idx) => {
                 const user = users?.find((_user) => _user.docId === userEmail)
                 return (
-                  <li style={{ width: 90 + '%' }} key={idx} className='mt-4 card'>
+                  <li
+                    style={{ width: 90 + '%' }}
+                    key={idx}
+                    className='mt-4 card'
+                  >
                     <div className='card-body d-flex justify-content-between'>
                       <div className='d-flex align-items-center'>
                         <div className='d-flex flex-column align-items-start'>
@@ -155,7 +184,10 @@ const SinglePost = () => {
                         </div>
                         <div className='flex-1 commentor-detail'>
                           <h6 className='mb-0'>
-                            <Link to={`/p/${user?.username}`} className='text-dark media-heading'>
+                            <Link
+                              to={`/p/${user?.username}`}
+                              className='text-dark media-heading'
+                            >
                               {user?.username}
                             </Link>
                           </h6>
@@ -164,7 +196,10 @@ const SinglePost = () => {
                       </div>
                     </div>
                     <p className='fw-bold px-3 rounded'>
-                      <ReactMarkdown components={components} children={comment} />
+                      <ReactMarkdown
+                        components={components}
+                        children={comment}
+                      />
                     </p>
                   </li>
                 )
