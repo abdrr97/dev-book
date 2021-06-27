@@ -118,7 +118,6 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
-      setLoading(true)
       setUserInfo({
         username: user.username || '',
         bio: user.bio || '',
