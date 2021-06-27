@@ -11,9 +11,11 @@ const ForumProvider = ({ children }) => {
   const { user } = useContext(PortfolioContext)
   const [posts, setPosts] = useState([])
   const [progress, setProgress] = useState(0)
+  const [loading, setLoading] = useState(false)
 
   const createPost = (_post) => {
     if (!currentUser && !user.username) return
+    setLoading(true)
     const _docRef = db.collection('forum')
 
     const { postImage } = _post
@@ -21,13 +23,12 @@ const ForumProvider = ({ children }) => {
     if (!postImage) {
       _docRef
         .add({
-          post: {
-            ..._post,
-          },
+          post: _post,
           author: user.email,
           comments: [],
           createdAt: timestamp(),
         })
+        .then(() => setLoading(false))
         .finally(() => {
           window.location = '/posts'
         })
@@ -45,13 +46,12 @@ const ForumProvider = ({ children }) => {
           const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
           setProgress(_percentage)
         },
-        (err) => {},
+        (err) => setLoading(false),
         () => {
           // on finish upload
           stgRef.getDownloadURL().then((url) => {
             // get post image url
             // when upload is done !
-
             _docRef
               .add({
                 post: {
@@ -62,8 +62,8 @@ const ForumProvider = ({ children }) => {
                 comments: [],
                 createdAt: timestamp(),
               })
+              .then(() => setLoading(false))
               .finally(() => {
-                // history.push('posts')
                 window.location = '/posts'
               })
           })
@@ -79,6 +79,7 @@ const ForumProvider = ({ children }) => {
   }
 
   const addComment = (_post, _comment) => {
+    setLoading(true)
     const date = Date.now()
     const _userComment = {
       userEmail: user.email,
@@ -89,9 +90,11 @@ const ForumProvider = ({ children }) => {
 
     _docRef.get().then((_doc) => {
       if (_doc.exists) {
-        _docRef.update({
-          comments: [..._doc.data().comments, _userComment],
-        })
+        _docRef
+          .update({
+            comments: [..._doc.data().comments, _userComment],
+          })
+          .finally(() => setLoading(false))
       }
     })
   }
@@ -115,7 +118,7 @@ const ForumProvider = ({ children }) => {
     return unsubscribe
   }, [])
 
-  const values = { posts, createPost, isPostExists, addComment, progress }
+  const values = { posts, createPost, isPostExists, addComment, progress, loading }
 
   return <ForumContext.Provider value={values} children={children} />
 }

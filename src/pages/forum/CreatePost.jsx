@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
-import { ForumContext } from '../../context/forumContext'
 import ReactMarkdown from 'react-markdown'
-import { components } from '../../components/MarkdownPost'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import { ForumContext } from '../../context/forumContext'
+import { components } from '../../components/MarkdownPost'
 
 const CreatePost = () => {
-  const { createPost, progress } = useContext(ForumContext)
+  const { createPost, progress, loading } = useContext(ForumContext)
 
   const [post, setPost] = useState({
     postTitle: '',
@@ -49,8 +49,8 @@ const CreatePost = () => {
             className='form-control mb-3'
           />
           <ReactMarkdown components={components} children={post.postText} />
-          <button className='btn btn-info'>
-            {progress ? `Creating ... ${progress?.toFixed(1)}%` : 'Create Post'}
+          <button disabled={loading} className='btn btn-info'>
+            {progress ? `Creating... ${progress?.toFixed(1)}%` : 'Create Post'}
           </button>
         </form>
       </main>

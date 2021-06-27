@@ -31,10 +31,7 @@ const SignUp = () => {
         .where('username', '==', username)
         .get()
         .then((snapshot) => {
-          const _users = snapshot.docs.map((doc) => {
-            return doc.data()
-          })
-
+          const _users = snapshot.docs.map((doc) => doc.data())
           if (_users?.length <= 0) {
             signup(email, password)
               .then(({ user }) => {
@@ -48,6 +45,7 @@ const SignUp = () => {
                     photoURL: DEFAULT_PROFILE_AVATAR,
                     uid: user.uid,
                     email: email,
+                    bgImage: '/images/enterprise.png',
                     lastLoggedIn: timestamp(),
                   })
                   .then(() => {

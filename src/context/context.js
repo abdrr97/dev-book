@@ -18,6 +18,39 @@ const PortfolioProvider = ({ children }) => {
     return db.collection('users').where('username', '==', username).get()
   }
 
+  const changeUserBackground = (file) => {
+    // if no user is logged in return
+    // (don't execute the other code)
+    if (!currentUser) return
+
+    const _docRef = db.collection('users').doc(currentUser.email)
+    // upload/update image url only
+    const types = ['image/png', 'image/jpeg']
+
+    if (file && types.includes(file.type)) {
+      const stgRef = storage.ref(currentUser.uid)
+      stgRef.put(file).on(
+        'state_changed',
+        (snap) => {
+          // uploading
+          const _percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+          setProgress(_percentage)
+        },
+        (err) => {},
+        () => {
+          // on finish upload
+          stgRef.getDownloadURL().then((url) => {
+            _docRef
+              .update({
+                bgImage: url,
+              })
+              .finally(() => setProgress(0))
+          })
+        }
+      )
+    }
+  }
+
   // this is the main function for updating user profile
   const updateUserProfile = (info) => {
     // if no user is logged in return
@@ -201,6 +234,7 @@ const PortfolioProvider = ({ children }) => {
     updateExperience,
     addProject,
     removeProject,
+    changeUserBackground,
   }
 
   return <PortfolioContext.Provider value={values} children={children} />

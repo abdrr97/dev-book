@@ -1,13 +1,31 @@
 import React, { useContext } from 'react'
+import { AiFillEdit } from 'react-icons/ai'
 import { BsChat } from 'react-icons/bs'
+import { RiRadioButtonLine } from 'react-icons/ri'
 import { useHistory } from 'react-router-dom'
+import { AuthContext } from '../../context/authContext'
 import { ChatContext } from '../../context/chatContext'
+import { PortfolioContext } from '../../context/context'
 import Skills from './Skills'
+
 const Hero = ({ userInfo }) => {
-  const { skills, address, bio, birthDate, email, photoURL, username, experience, projects } =
-    userInfo
-  const { setSelectedUser } = useContext(ChatContext)
+  const {
+    skills,
+    address,
+    bio,
+    birthDate,
+    email,
+    photoURL,
+    username,
+    experience,
+    projects,
+    bgImage,
+    online,
+  } = userInfo
   const history = useHistory()
+  const { changeUserBackground, progress } = useContext(PortfolioContext)
+  const { setSelectedUser } = useContext(ChatContext)
+  const { currentUser } = useContext(AuthContext)
 
   const triggerNotification = () => {
     Promise.allSettled([
@@ -18,17 +36,34 @@ const Hero = ({ userInfo }) => {
       history.push('/chat-room')
     })
   }
-
   // TODO: online here
   // TODO: icons
   return (
     <>
       <div className='mx-height'>
         <section
-          style={{ backgroundImage: `url('/images/enterprise.png')` }}
+          style={{ backgroundImage: `url('${bgImage}')` }}
           className='bg-half-260 d-table w-100'
         >
-          <div className='bg-overlay'></div>
+          <div className='bg-overlay relative'>
+            {currentUser?.email === email && (
+              <>
+                <label
+                  htmlFor='bg-image'
+                  style={{ fontSize: '16px' }}
+                  className='m-2 btn-edit-background btn btn-sm btn-warning'
+                >
+                  {progress ? `Uploading ${progress.toFixed(1)}% ` : <AiFillEdit />}
+                </label>
+                <input
+                  onChange={({ target }) => changeUserBackground(target.files[0])}
+                  hidden
+                  id='bg-image'
+                  type='file'
+                />
+              </>
+            )}
+          </div>
         </section>
         <section className='section'>
           <div className='container'>
@@ -38,11 +73,26 @@ const Hero = ({ userInfo }) => {
                   <div className='text-center py-5 border-bottom rounded-top'>
                     <img
                       src={photoURL}
-                      className='avatar avatar-medium mx-auto rounded-circle shadow d-block'
+                      className='  avatar avatar-medium mx-auto rounded-circle shadow d-block'
                       alt=''
                     />
-                    <h5 className='mt-3 mb-0'>{username}</h5>
+
+                    <h5 className='mt-3 mb-0'>
+                      {username}
+                      <span
+                        className={
+                          online === 'ONLINE'
+                            ? 'text-success'
+                            : online === 'OFFLINE'
+                            ? 'text-danger'
+                            : 'text-warning'
+                        }
+                      >
+                        <RiRadioButtonLine style={{ fontSize: '25px' }} />
+                      </span>
+                    </h5>
                     <p className='text-muted mb-0'>Senior Web Developer</p>
+
                     {/* TODO: add position */}
                   </div>
                   <div className='card-body'>
@@ -78,9 +128,9 @@ const Hero = ({ userInfo }) => {
                   <p className='text-muted mb-0'>{bio}</p>
                   <h4 className='mt-lg-5 mt-4'>Experience :</h4>
                   <div className='row'>
-                    {experience?.map(({ year, title, company, description }) => {
+                    {experience?.map(({ year, title, company, description }, idx) => {
                       return (
-                        <div className='col-lg-12 mt-4 pt-2'>
+                        <div className='col-lg-12 mt-4 pt-2' key={idx}>
                           <div className='d-flex'>
                             <div className='company-logo text-muted h6 me-3 text-center'>
                               {year}
